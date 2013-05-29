@@ -22,6 +22,8 @@ class BackendNavigationFactory extends AbstractNavigationFactory
     {
         $loadedModules = $serviceLocator->get('ModuleManager')->getLoadedModules();
 
+        $pages = array();
+
         foreach ($loadedModules as $module) {
             if ($module instanceof BackendModuleInterface) {
                 $pages[] = $module->getNavPage();
