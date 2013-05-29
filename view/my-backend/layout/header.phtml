@@ -1,0 +1,77 @@
+<?php
+/**
+ * @var \Zend\View\Renderer\PhpRenderer $this *
+ * @author Stefano Torresi (http://stefanotorresi.it)
+ * @license See the file LICENSE.txt for copying permission.
+ * ************************************************
+ */
+
+$logoutUrl = $this->url(
+    'zfcuser/logout',
+    array(),
+    array(
+        'query' => array(
+            'redirect' => $this->url($this->routes['backend']),
+        )
+    )
+);
+
+$this->placeHolder('title')->set('<h2 class="title">'.$this->escapeHtml($this->layout()->title).'</h2>');
+
+if ($this->isGranted('admin')) {
+    $this->placeHolder('title')->setPrefix('<div class="span6">')->setPostfix('</div>');
+}
+
+?>
+<header id="header">
+
+    <div class="row-fluid">
+
+        <?= $this->placeHolder('title') ?>
+
+        <?php if ($this->isGranted('admin')) : ?>
+
+        <nav id="nav-secondary" class="span6">
+            <div class="btn-group">
+                <a class="btn btn-success btn-small btn-icon-text"
+                   href="<?= $this->url($this->routes['frontend']) ?>">
+                    <i class="icon-home icon-white"></i>
+                    <span> Frontend</span>
+                </a>
+                <a class="btn btn-info btn-small btn-icon-text"
+                   href="<?= $this->url($this->routes['backend']) ?>">
+                    <i class="icon-cog icon-white"></i>
+                    <span> Backend</span>
+                </a>
+                <a class="btn btn-danger btn-small btn-icon-text"
+                   href="<?= $logoutUrl ?>">
+                    <i class="icon-off icon-white"></i>
+                    <span> Logout</span>
+                </a>
+            </div>
+        </nav>
+
+        <?php endif; ?>
+
+    </div>
+
+    <?php if ($this->isGranted('admin')) : ?>
+
+    <div class="row-fluid">
+        <nav id="nav-backend" class="navbar span12">
+            <div class="navbar-inner">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="nav-collapse collapse">
+                    <?= $this->navigation('nav-backend')->menu()->setUlClass('nav') ?>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <?php endif; ?>
+
+</header><!-- #header -->

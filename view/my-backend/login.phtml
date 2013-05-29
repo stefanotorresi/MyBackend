@@ -1,0 +1,51 @@
+<?php
+/**
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ *
+ * @author Stefano Torresi (http://stefanotorresi.it)
+ * @license See the file LICENSE.txt for copying permission.
+ * ************************************************
+ */
+
+use MyBackend\Listener\Route;
+
+$this->layout()->bodyClass = 'login';
+
+$form = $this->loginForm;
+$form->prepare();
+$form->setAttributes(array(
+    'action' => $this->url('zfcuser/login'),
+    'method' => 'post',
+    'id' => 'login-form',
+));
+
+$form->get('identity')->setAttribute('class', 'input-block-level');
+$form->get('credential')->setAttribute('class', 'input-block-level');
+$form->get('submit')->setAttribute('class', 'btn btn-large btn-primary');
+$form->get('submit')->setLabel('Login');
+
+$this->formElementErrors()->setAttributes(array('class' => 'form-errors'));
+
+?>
+
+<?= $this->form()->openTag($form) ?>
+
+<dl>
+    <?= $this->formElementErrors($form->get('identity')) ?>
+
+    <dt><?= $this->formLabel($form->get('identity')) ?></dt>
+    <dd><?= $this->formInput($form->get('identity')) ?></dd>
+
+    <dt><?= $this->formLabel($form->get('credential')) ?></dt>
+    <dd><?= $this->formInput($form->get('credential')) ?></dd>
+
+    <?php if ($this->redirect): ?>
+        <input type="hidden" name="redirect" value="<?= $this->escapeHtmlAttr($this->redirect) ?>" />
+    <?php endif ?>
+
+    <dd>
+        <?= $this->formButton($form->get('submit')) ?>
+    </dd>
+</dl>
+
+<?= $this->form()->closeTag() ?>

@@ -1,0 +1,33 @@
+<?php
+/**
+ * @var \Zend\View\Renderer\PhpRenderer $this *
+ * @author Stefano Torresi (http://stefanotorresi.it)
+ * @license See the file LICENSE.txt for copying permission.
+ * ************************************************
+ */
+
+use Zend\Json\Json;
+
+// common javascript to be loaded at the bottom of the DOM
+$this->inlineScript()
+    ->appendFile('//heartcode-canvasloader.googlecode.com/files/heartcode-canvasloader-min-0.9.1.js')
+    ->appendFile($this->basePath('js/vendor/bootstrap.min.js'))
+    ->appendFile($this->basePath('js/vendor/console.js'))
+    ->appendFile($this->basePath('js/application.js?' . $this->layout()->cache_bust_index))
+    ->appendFile($this->basePath('js/backend.js?'.$this->layout()->cache_bust_index));
+
+$applicationConfig = array(
+    'homeUrl' => $this->url('admin'),
+);
+
+?>
+
+<!-- javascript -->
+
+<?= $this->inlineScript() . PHP_EOL ?>
+
+<script>
+    application = new Backend(<?= Json::encode($applicationConfig); ?>);
+</script>
+
+<!-- end javascript -->

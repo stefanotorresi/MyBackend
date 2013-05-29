@@ -1,0 +1,37 @@
+{
+    "name": "stefanotorresi/my-backend",
+    "description": "A Zend Framework 2 module that provides a basic and extensible admin backend UI through ZfcUser and ZfcRbac",
+    "type": "library",
+    "keywords": [
+        "zf2",
+        "zend",
+        "module",
+        "user",
+        "admin",
+        "backend"
+    ],
+    "homepage": "https://github.com/stefanotorresi/MyBackend",
+    "authors": [
+        {
+            "name": "Stefano Torresi",
+            "email": "webdev@stefanotorresi.it",
+            "homepage": "http://stefanotorresi.it"
+        }
+    ],
+    "require": {
+        "doctrine/doctrine-module": "0.8.x-dev",
+        "hounddog/doctrine-data-fixture-module": "dev-master@dev",
+        "zf-commons/zfc-base": "dev-master",
+        "zf-commons/zfc-user": "dev-master",
+        "zf-commons/zfc-user-doctrine-orm": "dev-master",
+        "zf-commons/zfc-rbac": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "MyBackend": "src/"
+        },
+        "classmap": [
+            "./"
+        ]
+    }
+}
