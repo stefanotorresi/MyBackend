@@ -19,13 +19,14 @@
         }
     ],
     "require": {
-        "doctrine/doctrine-module": "0.8.x-dev",
-        "doctrine/doctrine-orm-module": "dev-master",
+        "zf-commons/zfc-user-doctrine-orm": "*",
+        "zf-commons/zfc-rbac": "*"
+    },
+    "require-dev": {
+        "doctrine/doctrine-module": "0.8.*@dev",
+        "doctrine/doctrine-orm-module": "0.8.*@dev",
         "doctrine/data-fixtures": "dev-master",
-        "hounddog/doctrine-data-fixture-module": "dev-master@dev",
-        "zf-commons/zfc-user": "*",
-        "zf-commons/zfc-user-doctrine-orm": "dev-master",
-        "zf-commons/zfc-rbac": "dev-master"
+        "hounddog/doctrine-data-fixture-module": "dev-master"
     },
     "autoload": {
         "psr-0": {
