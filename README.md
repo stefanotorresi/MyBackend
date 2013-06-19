@@ -13,7 +13,9 @@ Features
 -   Example view templates and css built with Twitter Bootstrap
 
 
-Documentation
+TO-DO List
 ---
-
-TO-DO
+-   Write some docs
+-   Integrate with [AssetManager](//github.com/RWOverdijk/AssetManager)
+-   Integrate with [ZfcTwitterBootstrap](//github.com/mwillbanks/ZfcTwitterBootstrap)
+-   Provide out of the box working view templates using the aforementioned modules
