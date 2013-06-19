@@ -56,7 +56,11 @@ $bodyClass = (isset($this->error) ? 'error' : $this->layout()->bodyClass);
     <div id="wrapper">
         <?= $this->header ?>
 
-        <?= $this->content ?>
+        <section id="content">
+
+            <?= $this->content ?>
+
+        </section>
 
         <?= $this->footer ?>
     </div><!-- #wrapper -->
