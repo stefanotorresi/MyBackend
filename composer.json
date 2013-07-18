@@ -20,7 +20,8 @@
     ],
     "require": {
         "zf-commons/zfc-user-doctrine-orm": "*",
-        "zf-commons/zfc-rbac": "*"
+        "zf-commons/zfc-rbac": "*",
+        "mwillbanks/zfc-twitter-bootstrap": "dev-master"
     },
     "require-dev": {
         "doctrine/doctrine-module": "0.8.*@dev",

@@ -1,0 +1,43 @@
+<?php
+/**
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ *
+ * @author Stefano Torresi (http://stefanotorresi.it)
+ * @license See the file LICENSE.txt for copying permission.
+ * ************************************************
+ */
+
+if ($this->pageCount): ?>
+    <div class="pagination">
+        <ul>
+            <?php if(isset($this->previous)) : ?>
+                <li>
+                    <a href="<?= $this->url($this->route, array(
+                        'page' => $this->previous,
+                        'itemsPerPage' => $this->itemCountPerPage,
+                    )); ?>">
+                        <i class="icon-chevron-left"></i>
+                    </a>
+                </li>
+            <?php endif; ?>
+
+            <?php foreach ($this->pagesInRange as $page): ?>
+                <li<?=($page == $this->current) ? ' class="active"':'' ?>>
+                    <a href="<?= $this->url($this->route, array(
+                        'page' => $page,
+                        'itemsPerPage' => $this->itemCountPerPage,
+                    )); ?>"><?= $page; ?></a>
+                </li>
+            <?php endforeach; ?>
+
+            <?php if(isset($this->next)) : ?>
+                <li>
+                    <a href="<?= $this->url($this->route, array(
+                        'page' => $this->next,
+                        'itemsPerPage' => $this->itemCountPerPage,
+                    )); ?>"><i class="icon-chevron-right"></i></a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </div>
+<?php endif; ?>
