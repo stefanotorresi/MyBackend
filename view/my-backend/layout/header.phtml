@@ -66,18 +66,24 @@ if ($this->isGranted('admin')) {
                 <span class="icon-bar"></span>
             </a>
             <div class="nav-collapse collapse">
-                <?= $this->ztbnavigation()->ztbmenu('nav-backend')->setMaxDepth(1) ?>
+                <?= $this->ztbnavigation()->ztbmenu('nav-backend')->setMaxDepth(1)->setTranslatorTextDomain($this->layout()->namespace) ?>
             </div>
         </div>
     </nav>
 
     <nav id="breadcrumbs">
-        <?= $this->ztbnavigation()->ztbbreadcrumbs('nav-backend') ?>
+        <?php
+        echo $this->ztbnavigation()->ztbbreadcrumbs()
+            ->setTranslator($this->plugin('translate')->getTranslator())
+            ->setTranslatorTextDomain($this->layout()->namespace)->setContainer('nav-backend');
+        ?>
     </nav>
 
     <?php
         $button = '<button type="button" class="close" data-dismiss="alert">&times;</button>';
-        $this->flashMessenger()->setMessageOpenFormat("<div%s>$button<ul><li>")->setMessageCloseString('</li></ul></div>');
+        $this->flashMessenger()
+            ->setMessageOpenFormat("<div%s>$button<ul><li>")
+            ->setMessageCloseString('</li></ul></div>');
 
         echo $this->flashMessenger()->render('error', array('alert', 'alert-error', 'fade', 'in'));
         echo $this->flashMessenger()->render('success', array('alert', 'alert-success', 'fade', 'in'));

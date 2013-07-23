@@ -42,8 +42,10 @@ class Render extends AbstractListenerAggregate
 
     public function prepareLayout(MvcEvent $e)
     {
+        $serviceManager = $e->getApplication()->getServiceManager();
+
         /** @var \MyBackend\Module $module  */
-        $module = $e->getApplication()->getServiceManager()->get('ModuleManager')->getModule('MyBackend');
+        $module = $serviceManager->get('ModuleManager')->getModule('MyBackend');
 
         $rootModel = $e->getViewModel();
 
@@ -60,6 +62,13 @@ class Render extends AbstractListenerAggregate
         if ($rootModel->terminate()) {
             return;
         }
+
+        $viewHelperManager = $serviceManager->get('ViewHelperManager');
+        $viewHelperManager->get('translate')->setTranslatorTextDomain($rootModel->namespace);
+        $viewHelperManager->get('navigation')->setTranslatorTextDomain($rootModel->namespace);
+        $viewHelperManager->get('formlabel')->setTranslatorTextDomain($rootModel->namespace);
+        $viewHelperManager->get('formrow')->setTranslatorTextDomain($rootModel->namespace);
+        $viewHelperManager->get('flashmessenger')->setTranslatorTextDomain($rootModel->namespace);
 
         $rootModel->setTemplate('my-backend/layout/layout');
 

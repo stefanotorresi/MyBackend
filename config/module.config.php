@@ -151,4 +151,15 @@ return array(
             'admin' => 'MyBackend\Controller\AdminController',
         ),
     ),
+
+    'translator' => array(
+        'translation_file_patterns' => array(
+            array(
+                'type' => 'phpArray',
+                'base_dir'      => __DIR__ . '/../language',
+                'pattern'       => '%s/'.__NAMESPACE__.'.php',
+                'text_domain'   => __NAMESPACE__,
+            ),
+        ),
+    ),
 );
