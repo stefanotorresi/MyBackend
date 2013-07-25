@@ -15,14 +15,14 @@ use ZfcUser\Entity\User as ZfcUser;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="users")
+ * @ORM\Table(name="mbe_users")
  */
 class User extends ZfcUser implements IdentityInterface
 {
     /**
      * @ORM\ManyToMany(targetEntity="Role", cascade={"persist"})
      * @ORM\JoinTable(
-     *      name="users_roles",
+     *      name="mbe_users_roles",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="role_id")}
      * )

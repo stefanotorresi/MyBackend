@@ -16,7 +16,7 @@ use Zend\Permissions\Rbac\RoleInterface;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="roles")
+ * @ORM\Table(name="mbe_roles")
  */
 class Role extends ZendRole
 {
@@ -44,7 +44,7 @@ class Role extends ZendRole
     /**
      * @ORM\ManyToMany(targetEntity="Permission", cascade={"persist"})
      * @ORM\JoinTable(
-     *      name="roles_permissions",
+     *      name="mbe_roles_permissions",
      *      joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="role_id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="permission_id")}
      * )

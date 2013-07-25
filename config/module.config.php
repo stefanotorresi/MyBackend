@@ -39,7 +39,7 @@ return array(
             'ZfcRbac\Provider\AdjacencyList\Role\DoctrineDbal' => array(
                 'connection' => 'doctrine.connection.orm_default',
                 'options' => array(
-                    'table' => 'roles',
+                    'table' => 'mbe_roles',
                     'id_column' => 'role_id',
                     'name_column' => 'name',
                     'join_column' => 'parent_role_id'
@@ -48,9 +48,9 @@ return array(
             'ZfcRbac\Provider\Generic\Permission\DoctrineDbal' => array(
                 'connection' => 'doctrine.connection.orm_default',
                 'options' => array(
-                    'permission_table' => 'permissions',
-                    'role_table' => 'roles',
-                    'role_join_table' => 'roles_permissions',
+                    'permission_table' => 'mbe_permissions',
+                    'role_table' => 'mbe_roles',
+                    'role_join_table' => 'mbe_roles_permissions',
                     'permission_id_column' => 'permission_id',
                     'permission_join_column' => 'permission_id',
                     'role_id_column' => 'role_id',
