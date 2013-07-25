@@ -92,7 +92,7 @@ return array(
         )
     ),
     'data-fixture' => array(
-        __NAMESPACE__ . '_fixtures' => __DIR__ . '/../src/' . __NAMESPACE__ . '/Entity/Fixture',
+        __NAMESPACE__ . '_fixtures' => __DIR__ . '/../resources/fixtures',
     ),
 
     /**
