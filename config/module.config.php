@@ -28,6 +28,7 @@ return array(
      */
     'zfcrbac' => array(
         'anonymousRole' => 'guest',
+        'firewallController' => false,
         'firewallRoute' => true,
         'firewalls' => array(
             'ZfcRbac\Firewall\Route' => array(

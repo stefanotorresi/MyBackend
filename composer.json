@@ -24,10 +24,8 @@
         "mwillbanks/zfc-twitter-bootstrap": "dev-master"
     },
     "require-dev": {
-        "doctrine/doctrine-module": "0.8.*@dev",
-        "doctrine/doctrine-orm-module": "0.8.*@dev",
         "doctrine/data-fixtures": "dev-master",
-        "hounddog/doctrine-data-fixture-module": "dev-master"
+        "hounddog/doctrine-data-fixture-module": "*"
     },
     "autoload": {
         "psr-0": {
