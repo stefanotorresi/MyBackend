@@ -13,7 +13,7 @@ use Zend\Mvc\MvcEvent;
 class Route
 {
     /**
-     * @param MvcEvent $e
+     * @param  MvcEvent                            $e
      * @return null|\Zend\Stdlib\ResponseInterface
      */
     public static function onRoute(MvcEvent $e)

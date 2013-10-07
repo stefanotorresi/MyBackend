@@ -33,7 +33,7 @@ class AdminController extends AbstractActionController
         $this->getEvent()->getApplication()->getEventManager()->attach(
             MvcEvent::EVENT_RENDER,
             function(MvcEvent $e) use ($controller, $parentRoute) {
-                foreach($e->getViewModel()->getIterator() as $child) {
+                foreach ($e->getViewModel()->getIterator() as $child) {
                     /** @var ViewModel $child  */
                     if ($child->captureTo() === 'content') {
                         $child->setTemplate('my-backend/login');

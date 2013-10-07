@@ -15,7 +15,7 @@ use ZfcUser\Controller\UserController;
 class Login
 {
     /**
-     * @param MvcEvent $e
+     * @param  MvcEvent                            $e
      * @return null|\Zend\Stdlib\ResponseInterface
      */
     public static function preDispatch(MvcEvent $e)
@@ -35,12 +35,13 @@ class Login
 
         $request = $e->getRequest();
 
-        if (! $request instanceof Request ) {
+        if (! $request instanceof Request) {
             return;
         }
 
         if ($request->isPost()) {
             $request->getQuery()->set('redirect', $request->getPost('redirect'));
+
             return;
         }
 

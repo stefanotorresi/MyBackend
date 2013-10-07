@@ -62,16 +62,15 @@ class Role extends ZendRole
         $this->permissions = new ArrayCollection();
     }
 
-
     /**
      * Add permission to the role.
      *
-     * @param string|Permission $permission
+     * @param  string|Permission $permission
      * @return Role
      */
     public function addPermission($permission)
     {
-        if ( ! $permission instanceof Permission ) {
+        if (! $permission instanceof Permission) {
             $permission = new Permission($permission);
         }
 
