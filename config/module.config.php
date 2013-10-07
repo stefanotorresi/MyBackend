@@ -19,7 +19,6 @@ return array(
         'view_params' => array(
             'cache_bust_index' => uniqid(),
             'title' => 'My Backend',
-            'lang' => 'en',
         ),
     ),
 
