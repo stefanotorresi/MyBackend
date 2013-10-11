@@ -17,21 +17,4 @@ class BackendNavigationFactory extends AbstractNavigationFactory
     {
         return 'backend';
     }
-
-    protected function getPages(ServiceLocatorInterface $serviceLocator)
-    {
-        $loadedModules = $serviceLocator->get('ModuleManager')->getLoadedModules();
-
-        $pages = array();
-
-        foreach ($loadedModules as $module) {
-            if ($module instanceof BackendModuleInterface) {
-                $pages[] = $module->getNavPage();
-            }
-        }
-
-        $this->pages = $this->preparePages($serviceLocator, $pages);
-
-        return $this->pages;
-    }
 }

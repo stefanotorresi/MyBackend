@@ -8,7 +8,7 @@ Features
 ---
 
 -   Provides out-of-the-box working configuration for ZfcUser and ZfcRbac modules
--   You can drop in your backend components by just loading a module that implements a given interface
+-   You can drop in your backend components by just adding a backend navigation entry 
 -   Optional doctrine fixtures to get the thing working just with the Doctrine CLI
 -   Example view templates and css built with Twitter Bootstrap
 
