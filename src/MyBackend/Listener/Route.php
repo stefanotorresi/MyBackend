@@ -8,33 +8,62 @@
 
 namespace MyBackend\Listener;
 
+use MyBackend\Module as MyBackend;
+use Zend\EventManager\AbstractListenerAggregate;
+use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 
-class Route
+class Route extends AbstractListenerAggregate
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function attach(EventManagerInterface $eventManager)
+    {
+        $this->listeners[] = $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'selectModule'), -1);
+        $this->listeners[] = $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'rbacCheck'), -999);
+    }
+
+    public function selectModule(MvcEvent $e)
+    {
+        $routeName = $e->getRouteMatch()->getMatchedRouteName();
+        /** @var \MyBackend\Module $module  */
+        $module = $e->getApplication()->getServiceManager()->get('ModuleManager')->getModule('MyBackend');
+        $parentRoute = $module->getOption('routes.backend');
+
+        if (strpos($routeName, $parentRoute) !== 0) {
+            return;
+        }
+
+        $e->setParam('module', $module);
+
+        return $e;
+    }
+
     /**
      * @param  MvcEvent                            $e
      * @return null|\Zend\Stdlib\ResponseInterface
      */
-    public static function onRoute(MvcEvent $e)
+    public static function rbacCheck(MvcEvent $e)
     {
-        /** @var \Zend\Mvc\Application $app  */
-        $app    = $e->getTarget();
-        $serviceManager = $app->getServiceManager();
+        $serviceManager = $e->getApplication()->getServiceManager();
         $router = $e->getRouter();
         $routeName  = $e->getRouteMatch()->getMatchedRouteName();
-        $module = $serviceManager->get('ModuleManager')->getModule('MyBackend');
+        $module = $e->getParam('module');
 
-        $parentRoute = $module->getOption('routes.backend');
+        if (! $module instanceof MyBackend) {
+            return;
+        }
+
         $loginRoute = $module->getOption('routes.login');
 
-        if ($routeName === $loginRoute || strpos($routeName, $parentRoute) !== 0) {
+        if ($routeName === $loginRoute) {
             return;
         }
 
         $rbacService = $serviceManager->get('ZfcRbac\Service\Rbac');
 
-        if (!$rbacService->getFirewall('route')->isGranted($routeName)) {
+        if (! $rbacService->getFirewall('route')->isGranted($routeName)) {
             $url = $router->assemble(array(), array('name' => $loginRoute));
 
             $response = $e->getResponse();

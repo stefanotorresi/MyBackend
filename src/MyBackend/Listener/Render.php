@@ -7,8 +7,10 @@
 
 namespace MyBackend\Listener;
 
+use MyBackend\Module as MyBackend;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model;
 
@@ -19,37 +21,21 @@ class Render extends AbstractListenerAggregate
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'selectModule'), -1);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER, array($this, 'prepareLayout'), -1);
         $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, array($this, 'prepareLayout'), -101);
-    }
-
-    public function selectModule(MvcEvent $e)
-    {
-        $routeName = $e->getRouteMatch()->getMatchedRouteName();
-        /** @var \MyBackend\Module $module  */
-        $module = $e->getApplication()->getServiceManager()->get('ModuleManager')->getModule('MyBackend');
-        $parentRoute = $module->getOption('routes.backend');
-
-        if (strpos($routeName, $parentRoute) !== 0) {
-            return;
-        }
-
-        $rootModel = $e->getViewModel();
-
-        $rootModel->namespace = $module->getNamespace();
     }
 
     public function prepareLayout(MvcEvent $e)
     {
         $serviceManager = $e->getApplication()->getServiceManager();
 
-        /** @var \MyBackend\Module $module  */
-        $module = $serviceManager->get('ModuleManager')->getModule('MyBackend');
+        $module = $e->getParam('module');
+        if (! $module instanceof MyBackend) {
+            return;
+        }
 
         $rootModel = $e->getViewModel();
-
-        if (! $rootModel instanceof Model\ViewModel || $rootModel->namespace !== $module->getNamespace() ) {
+        if (! $rootModel instanceof Model\ViewModel) {
             return;
         }
 
@@ -63,13 +49,18 @@ class Render extends AbstractListenerAggregate
             return;
         }
 
-        $viewHelperManager = $serviceManager->get('ViewHelperManager');
-        $viewHelperManager->get('translate')->setTranslatorTextDomain($rootModel->namespace);
-        $viewHelperManager->get('navigation')->setTranslatorTextDomain($rootModel->namespace);
-        $viewHelperManager->get('formlabel')->setTranslatorTextDomain($rootModel->namespace);
-        $viewHelperManager->get('formrow')->setTranslatorTextDomain($rootModel->namespace);
-        $viewHelperManager->get('flashmessenger')->setTranslatorTextDomain($rootModel->namespace);
+        $translatorDomain = 'MyBackend';
 
+        $viewHelperManager = $serviceManager->get('ViewHelperManager');
+        $viewHelperManager->get('translate')->setTranslatorTextDomain($translatorDomain);
+        $viewHelperManager->get('navigation')->setTranslatorTextDomain($translatorDomain);
+        $viewHelperManager->get('formlabel')->setTranslatorTextDomain($translatorDomain);
+        $viewHelperManager->get('formrow')->setTranslatorTextDomain($translatorDomain);
+        $viewHelperManager->get('flashmessenger')->setTranslatorTextDomain($translatorDomain);
+        $viewHelperManager->get('ztbnavigation')->setTranslator($serviceManager->get('translator'))
+            ->setTranslatorTextDomain($translatorDomain);
+
+        $rootModel->displayLangNav = $serviceManager->has('nav-lang');
         $rootModel->setTemplate('my-backend/layout/layout');
 
         $header = new Model\ViewModel();

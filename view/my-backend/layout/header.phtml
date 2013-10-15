@@ -22,6 +22,20 @@ if ($this->isGranted('admin')) {
     $this->placeHolder('title')->setPrefix('<div class="span6">')->setPostfix('</div>');
 }
 
+$this->placeHolder('nav-lang')->captureStart();
+if ($this->layout()->displayLangNav) :
+    ?>
+    <div class="btn-group">
+        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+            <?= ucfirst(Locale::getDisplayLanguage($this->layout()->lang)) ?>
+            <span class="caret"></span>
+        </button>
+        <?= $this->navigation()->menu()->renderMenu('nav-lang', array('ulClass' => 'nav-lang dropdown-menu')) ?>
+    </div>
+    <?php
+endif;
+$this->placeHolder('nav-lang')->captureEnd();
+
 ?>
 <header id="header">
 
@@ -32,6 +46,7 @@ if ($this->isGranted('admin')) {
         <?php if ($this->isGranted('admin')) : ?>
 
         <nav id="nav-secondary" class="span6">
+            <?= $this->placeHolder('nav-lang') ?>
             <div class="btn-group">
                 <a class="btn btn-success btn-small btn-icon-text"
                    href="<?= $this->url($this->routes['frontend']) ?>">
@@ -51,6 +66,10 @@ if ($this->isGranted('admin')) {
             </div>
         </nav>
 
+        <?php else : ?>
+            <nav class="text-center">
+                <?= $this->placeHolder('nav-lang') ?>
+            </nav>
         <?php endif; ?>
 
     </div>
@@ -66,17 +85,13 @@ if ($this->isGranted('admin')) {
                 <span class="icon-bar"></span>
             </a>
             <div class="nav-collapse collapse">
-                <?= $this->ztbnavigation()->ztbmenu('nav-backend')->setMaxDepth(1)->setTranslatorTextDomain($this->layout()->namespace) ?>
+                <?= $this->ztbnavigation('nav-backend')->ztbmenu()->setMaxDepth(1) ?>
             </div>
         </div>
     </nav>
 
     <nav id="breadcrumbs">
-        <?php
-        echo $this->ztbnavigation()->ztbbreadcrumbs()
-            ->setTranslator($this->plugin('translate')->getTranslator())
-            ->setTranslatorTextDomain($this->layout()->namespace)->setContainer('nav-backend');
-        ?>
+        <?= $this->ztbnavigation('nav-backend')->ztbbreadcrumbs(); ?>
     </nav>
 
     <?php

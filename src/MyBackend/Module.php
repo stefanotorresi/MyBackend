@@ -19,10 +19,13 @@ class Module extends AbstractModule implements
     public function bootstrap(ModuleManager $moduleManager, ApplicationInterface $app)
     {
         $eventManager = $app->getEventManager();
+
+        $routeListener = new Listener\Route();
+        $routeListener->attach($eventManager);
+
         $renderListener = new Listener\Render();
         $renderListener->attach($eventManager);
 
-        $eventManager->attach(MvcEvent::EVENT_ROUTE, array(__NAMESPACE__ . '\Listener\Route', 'onRoute'), -999);
         $eventManager->attach(MvcEvent::EVENT_DISPATCH, array(__NAMESPACE__ . '\Listener\Login', 'preDispatch'), 999);
     }
 
