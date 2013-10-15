@@ -91,7 +91,10 @@ $this->placeHolder('nav-lang')->captureEnd();
     </nav>
 
     <nav id="breadcrumbs">
-        <?= $this->ztbnavigation('nav-backend')->ztbbreadcrumbs(); ?>
+        <?= $this->ztbnavigation('nav-backend')->ztbbreadcrumbs()->setTranslator(
+                $this->plugin('translate')->getTranslator(),
+                'MyBackend'
+            ); ?>
     </nav>
 
     <?php

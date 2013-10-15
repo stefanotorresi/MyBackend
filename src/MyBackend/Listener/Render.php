@@ -57,8 +57,7 @@ class Render extends AbstractListenerAggregate
         $viewHelperManager->get('formlabel')->setTranslatorTextDomain($translatorDomain);
         $viewHelperManager->get('formrow')->setTranslatorTextDomain($translatorDomain);
         $viewHelperManager->get('flashmessenger')->setTranslatorTextDomain($translatorDomain);
-        $viewHelperManager->get('ztbnavigation')->setTranslator($serviceManager->get('translator'))
-            ->setTranslatorTextDomain($translatorDomain);
+        $viewHelperManager->get('ztbnavigation')->setTranslatorTextDomain($translatorDomain);
 
         $rootModel->displayLangNav = $serviceManager->has('nav-lang');
         $rootModel->setTemplate('my-backend/layout/layout');
