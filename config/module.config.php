@@ -29,6 +29,8 @@ return array(
         'anonymousRole' => 'guest',
         'firewallController' => false,
         'firewallRoute' => true,
+        'template' => 'error/403',
+        'enableLazyProviders' => true,
         'firewalls' => array(
             'ZfcRbac\Firewall\Route' => array(
                 array('route' => 'admin/login', 'roles' => 'guest'),
@@ -60,6 +62,7 @@ return array(
                 )
             )
         ),
+        'identity_provider' => 'zfcuser_auth_service',
     ),
 
     /**
