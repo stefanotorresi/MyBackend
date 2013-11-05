@@ -16,4 +16,5 @@ return array(
     'Browse' => 'Sfoglia',
     'Replace' => 'Sostituisci',
     'Remove' => 'Rimuovi',
+    'Update' => 'Aggiorna',
 );
