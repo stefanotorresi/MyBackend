@@ -27,6 +27,11 @@
         "doctrine/data-fixtures": "dev-master",
         "hounddog/doctrine-data-fixture-module": "*"
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.x-dev"
+        }
+    },
     "autoload": {
         "psr-0": {
             "MyBackend": "src/"
