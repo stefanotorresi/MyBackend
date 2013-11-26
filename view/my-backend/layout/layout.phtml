@@ -30,11 +30,11 @@ $bodyClass = (isset($this->error) ? 'error' : $this->layout()->bodyClass);
 
 ?>
 <?= $this->doctype().PHP_EOL ?>
-<!--[if lt IE 7]>      <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="<?= $this->layout()->lang ?>"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie10 lt-ie9 lt-ie8" lang="<?= $this->layout()->lang ?>"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie10 lt-ie9" lang="<?= $this->layout()->lang ?>"> <![endif]-->
-<!--[if IE 9]>         <html class="no-js lt-ie10" lang="<?= $this->layout()->lang ?>"> <![endif]-->
-<!--[if gt IE 9]><!--> <html class="no-js" lang="<?= $this->layout()->lang ?>"> <!--<![endif]-->
+<!--[if lt IE 7]>      <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="<?= Locale::getDefault() ?>"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie10 lt-ie9 lt-ie8" lang="<?= Locale::getDefault() ?>"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie10 lt-ie9" lang="<?= Locale::getDefault() ?>"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js lt-ie10" lang="<?= Locale::getDefault() ?>"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="no-js" lang="<?= Locale::getDefault() ?>"> <!--<![endif]-->
 <head>
     <?= $this->headTitle($this->layout()->title)->setSeparator(' | ').PHP_EOL ?>
     <?= $this->headMeta()->setCharset('utf-8').PHP_EOL; ?>

@@ -27,7 +27,7 @@ if ($this->layout()->displayLangNav) :
     ?>
     <div class="btn-group">
         <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
-            <?= ucfirst(Locale::getDisplayLanguage($this->layout()->lang)) ?>
+            <?= ucfirst(Locale::getDisplayLanguage(Locale::getDefault())) ?>
             <span class="caret"></span>
         </button>
         <?= $this->navigation()->menu()->renderMenu('nav-lang', array('ulClass' => 'nav-lang dropdown-menu')) ?>
