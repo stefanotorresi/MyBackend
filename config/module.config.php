@@ -24,44 +24,27 @@ return [
     /**
      * ZfcRbac module
      */
-    'zfcrbac' => [
-        'anonymousRole' => 'guest',
-        'firewallController' => false,
-        'firewallRoute' => true,
-        'template' => 'error/403',
-        'enableLazyProviders' => true,
-        'firewalls' => [
-            'ZfcRbac\Firewall\Route' => [
-                ['route' => 'admin/login', 'roles' => 'guest'],
-                ['route' => 'admin/*', 'roles' => 'admin'],
+    'zfc_rbac' => [
+        'protection_policy' => 'allow',
+        'guards' => [
+            'ZfcRbac\Guard\RouteGuard' => [
+                'admin' => ['admin'],
+                'admin/*' => ['admin'],
+                'admin/login'=> ['guest'],
             ],
         ],
-        'providers' => [
-            'ZfcRbac\Provider\AdjacencyList\Role\DoctrineDbal' => [
-                'connection' => 'doctrine.connection.orm_default',
-                'options' => [
-                    'table' => 'mbe_roles',
-                    'id_column' => 'role_id',
-                    'name_column' => 'name',
-                    'join_column' => 'parent_role_id'
-                ]
+        'role_providers' => [
+            'ZfcRbac\Role\ObjectRepositoryRoleProvider' => [
+                'object_manager' => 'doctrine.entitymanager.orm_default',
+                'class_name'     => 'MyBackend\Entity\Role',
             ],
-            'ZfcRbac\Provider\Generic\Permission\DoctrineDbal' => [
-                'connection' => 'doctrine.connection.orm_default',
-                'options' => [
-                    'permission_table' => 'mbe_permissions',
-                    'role_table' => 'mbe_roles',
-                    'role_join_table' => 'mbe_roles_permissions',
-                    'permission_id_column' => 'permission_id',
-                    'permission_join_column' => 'permission_id',
-                    'role_id_column' => 'role_id',
-                    'role_join_column' => 'role_id',
-                    'permission_name_column' => 'name',
-                    'role_name_column' => 'name'
-                ]
-            ]
         ],
-        'identity_provider' => 'zfcuser_auth_service',
+        'permission_providers' => [
+            'ZfcRbac\Permission\ObjectRepositoryPermissionProvider' => [
+                'object_manager' => 'doctrine.entitymanager.orm_default',
+                'class_name'     => 'MyBackend\Entity\Permission',
+            ],
+        ],
     ],
 
     /**
@@ -135,6 +118,7 @@ return [
 
     'service_manager' => [
         'factories' => [
+            'MyBackend\Options\ModuleOptions' => 'MyBackend\Options\ModuleOptionsFactory',
             'nav-backend' => __NAMESPACE__ . '\Service\BackendNavigationFactory',
         ],
         'aliases' => [
@@ -168,9 +152,7 @@ return [
         'resolver_configs' => [
             'collections' => [
                 'css/backend.css' => [
-                    'sass/bootstrap.scss',
                     'sass/backend.scss',
-                    'sass/backend.login.scss',
                 ],
                 'js/backend-scripts.js' => [
                     'js/jquery-bundle.js',
@@ -187,6 +169,11 @@ return [
                 'sass/backend.scss' => __DIR__ . '/../assets/sass/backend.scss',
                 'sass/backend.login.scss' => __DIR__ . '/../assets/sass/backend.login.scss',
                 'js/backend.js' => __DIR__ . '/../assets/js/backend.js',
+            ],
+        ],
+        'filters' => [
+            'css/backend.css' => [
+                [ 'service' => 'MyAsseticSassFilter' ],
             ],
         ],
     ],
