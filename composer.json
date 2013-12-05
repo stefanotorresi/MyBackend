@@ -22,7 +22,7 @@
         "php": ">5.4.1",
         "stefanotorresi/my-base": "1.*@dev",
         "zf-commons/zfc-user-doctrine-orm": "0.*",
-        "zf-commons/zfc-rbac": "1.*",
+        "zf-commons/zfc-rbac": "1.*@dev",
         "mwillbanks/zfc-twitter-bootstrap": "dev-master",
         "rwoverdijk/assetmanager": "1.*"
     },
