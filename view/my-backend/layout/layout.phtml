@@ -22,9 +22,7 @@ $this->headLink()
 
 // these are the only scripts needed in the head
 // any other script is included in at the bottom of the DOM, inside 'javascript.phtml' template
-$this->headScript()
-    ->prependFile('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
-    ->prependFile($this->basePath('js/vendor/modernizr-2.6.2.min.js'));
+$this->headScript()->prependFile($this->basePath('js/header-scripts.js?').$this->layout()->cache_bust_index);
 
 $bodyClass = (isset($this->error) ? 'error' : $this->layout()->bodyClass);
 
@@ -40,7 +38,6 @@ $bodyClass = (isset($this->error) ? 'error' : $this->layout()->bodyClass);
     <?= $this->headMeta()->setCharset('utf-8').PHP_EOL; ?>
     <?= $this->headLink().PHP_EOL ?>
     <?= $this->headScript().PHP_EOL ?>
-    <script>window.jQuery || document.write('<script src="<?= $this->basePath('js/vendor/jquery-1.9.1.min.js') ?>"><\/script>')</script>
 </head>
 
 <body class="<?= $this->escapeHtmlAttr($bodyClass) ?>">

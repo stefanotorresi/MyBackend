@@ -7,18 +7,14 @@
 
 namespace MyBackend;
 
+use MyBase\AbstractModule;
 use Zend\Mvc\MvcEvent;
-use ZfcBase\Module\AbstractModule;
-use Zend\ModuleManager\Feature;
-use Zend\ModuleManager\ModuleManager;
-use Zend\Mvc\ApplicationInterface;
 
-class Module extends AbstractModule implements
-    Feature\ConfigProviderInterface
+class Module extends AbstractModule
 {
-    public function bootstrap(ModuleManager $moduleManager, ApplicationInterface $app)
+    public function onBootstrap(MvcEvent $event)
     {
-        $eventManager = $app->getEventManager();
+        $eventManager = $event->getApplication()->getEventManager();
 
         $routeListener = new Listener\Route();
         $routeListener->attach($eventManager);
@@ -27,15 +23,5 @@ class Module extends AbstractModule implements
         $renderListener->attach($eventManager);
 
         $eventManager->attach(MvcEvent::EVENT_DISPATCH, array(__NAMESPACE__ . '\Listener\Login', 'preDispatch'), 999);
-    }
-
-    public function getDir()
-    {
-        return __DIR__ . '/../..';
-    }
-
-    public function getNamespace()
-    {
-        return __NAMESPACE__;
     }
 }

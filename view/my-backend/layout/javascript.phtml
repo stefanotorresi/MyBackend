@@ -9,25 +9,11 @@
 use Zend\Json\Json;
 
 // common javascript to be loaded at the bottom of the DOM
-$this->inlineScript()
-    ->appendFile('//heartcode-canvasloader.googlecode.com/files/heartcode-canvasloader-min-0.9.1.js')
-    ->appendFile($this->basePath('js/vendor/bootstrap.min.js'))
-    ->appendFile($this->basePath('js/vendor/console.js'))
-    ->appendFile($this->basePath('js/application.js?' . $this->layout()->cache_bust_index))
-    ->appendFile($this->basePath('js/backend.js?'.$this->layout()->cache_bust_index));
+$this->inlineScript()->appendFile($this->basePath('js/backend-scripts.js?') . $this->layout()->cache_bust_index);
 
 $applicationConfig = array(
-    'homeUrl' => $this->url('admin'),
+    'homeUrl' => $this->url('admin', [], ['force_canonical' => true]),
 );
 
-?>
+echo $this->inlineScript()->prependScript('app = new Backend('. Json::encode($applicationConfig) .');').PHP_EOL;
 
-<!-- javascript -->
-
-<?= $this->inlineScript() . PHP_EOL ?>
-
-<script>
-    application = new Backend(<?= Json::encode($applicationConfig); ?>);
-</script>
-
-<!-- end javascript -->

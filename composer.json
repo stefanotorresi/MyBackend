@@ -1,6 +1,6 @@
 {
     "name": "stefanotorresi/my-backend",
-    "description": "A Zend Framework 2 module that provides a basic and extensible admin backend UI through ZfcUser and ZfcRbac",
+    "description": "A Zend Framework 2 module that glues a bunch of packages to lay down the base for an admin backend UI.",
     "type": "library",
     "keywords": [
         "zf2",
@@ -19,9 +19,11 @@
         }
     ],
     "require": {
-        "zf-commons/zfc-user-doctrine-orm": "*",
-        "zf-commons/zfc-rbac": "*",
-        "mwillbanks/zfc-twitter-bootstrap": "dev-master"
+        "php": ">5.4.1",
+        "zf-commons/zfc-user-doctrine-orm": "0.*",
+        "zf-commons/zfc-rbac": "1.*",
+        "mwillbanks/zfc-twitter-bootstrap": "dev-master",
+        "rwoverdijk/assetmanager": "1.*"
     },
     "require-dev": {
         "doctrine/data-fixtures": "dev-master",

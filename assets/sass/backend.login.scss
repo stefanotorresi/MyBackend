@@ -1,0 +1,47 @@
+body.login {
+  .title {
+    text-align: center;
+    em {
+      font-size: 1.5em;
+    }
+  }
+
+  #wrapper {
+    max-width: 300px;
+    padding: 19px 29px 19px;
+    margin: 20px auto;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.05);
+    font-size: 16px;
+  }
+
+  #login-form {
+    dd {
+      margin-left: 0;
+      margin-bottom: 15px;
+    }
+    label {
+      font-size: inherit;
+    }
+    input[type="text"],
+    input[type="password"] {
+      font-size: inherit;
+      height: auto;
+      padding: 7px 9px;
+    }
+    .form-errors {
+      font-size: inherit;
+      text-align: center;
+      margin: 0 0 10px;
+    }
+  }
+
+  @media (max-width: 320px) {
+    padding-top: 0;
+    #wrapper {
+      margin-top: 0
+    }
+  }
+}
