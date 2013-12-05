@@ -5,7 +5,7 @@
  * ************************************************
  */
 
-return array(
+return [
     'New entry was added successfully' => 'Nuovo elemento aggiunto correttamente',
     'Entry was deleted successfully' => 'Elemento eliminato correttamente',
     'Entry was updated successfully' => 'Elemento modificato correttamente',
@@ -17,4 +17,4 @@ return array(
     'Replace' => 'Sostituisci',
     'Remove' => 'Rimuovi',
     'Update' => 'Aggiorna',
-);
+];

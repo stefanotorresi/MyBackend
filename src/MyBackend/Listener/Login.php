@@ -49,10 +49,10 @@ class Login
         $loginRoute             = $module->getOption('routes.login');
         $disableFrontendLogin   = $module->getOption('disable_frontend_login', false);
 
-        $adminUrl = $router->assemble(array(), array('name' => $parentRoute));
+        $adminUrl = $router->assemble([], ['name' => $parentRoute]);
 
         if ($request->getQuery('redirect') === $adminUrl || $disableFrontendLogin) {
-            $url = $router->assemble(array(), array('name' => $loginRoute));
+            $url = $router->assemble([], ['name' => $loginRoute]);
 
             $response = $e->getResponse();
             $response->getHeaders()->addHeaderLine('Location', $url);

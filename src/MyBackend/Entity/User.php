@@ -42,7 +42,7 @@ class User extends ZfcUser implements IdentityInterface
      */
     public function getRoles()
     {
-        $roleNames = array();
+        $roleNames = [];
 
         foreach ($this->roles as $role) {
             /** @var Role $role  */

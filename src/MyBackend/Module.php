@@ -22,6 +22,6 @@ class Module extends AbstractModule
         $renderListener = new Listener\Render();
         $renderListener->attach($eventManager);
 
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH, array(__NAMESPACE__ . '\Listener\Login', 'preDispatch'), 999);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, [__NAMESPACE__ . '\Listener\Login', 'preDispatch'], 999);
     }
 }

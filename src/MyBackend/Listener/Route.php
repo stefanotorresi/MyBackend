@@ -20,8 +20,8 @@ class Route extends AbstractListenerAggregate
      */
     public function attach(EventManagerInterface $eventManager)
     {
-        $this->listeners[] = $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'selectModule'), -1);
-        $this->listeners[] = $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'rbacCheck'), -999);
+        $this->listeners[] = $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'selectModule'], -1);
+        $this->listeners[] = $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'rbacCheck'], -999);
     }
 
     public function selectModule(MvcEvent $e)
@@ -64,7 +64,7 @@ class Route extends AbstractListenerAggregate
         $rbacService = $serviceManager->get('ZfcRbac\Service\Rbac');
 
         if (! $rbacService->getFirewall('route')->isGranted($routeName)) {
-            $url = $router->assemble(array(), array('name' => $loginRoute));
+            $url = $router->assemble([], ['name' => $loginRoute]);
 
             $response = $e->getResponse();
             $response->getHeaders()->addHeaderLine('Location', $url);
