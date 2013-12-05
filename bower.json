@@ -1,0 +1,14 @@
+{
+  "name": "MyBackend",
+  "version": "0.0.1",
+  "private": true,
+  "ignore": [
+    "**/.*"
+  ],
+  "dependencies": {
+    "modernizr": "2.*",
+    "yepnope": "1.*",
+    "jquery": "*",
+    "yatsatrap": "~2.3.2"
+  }
+}
