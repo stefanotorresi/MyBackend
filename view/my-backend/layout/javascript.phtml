@@ -8,12 +8,11 @@
 
 use Zend\Json\Json;
 
-// common javascript to be loaded at the bottom of the DOM
-$this->inlineScript()->appendFile($this->basePath('js/backend-scripts.js?') . $this->layout()->cache_bust_index);
-
 $applicationConfig = array(
     'homeUrl' => $this->url('admin', [], ['force_canonical' => true]),
 );
 
-echo $this->inlineScript()->prependScript('app = new Backend('. Json::encode($applicationConfig) .');').PHP_EOL;
+echo $this->inlineScript()
+        ->prependScript('app = new Backend('. Json::encode($applicationConfig) .');')
+        ->prependFile($this->basePath('js/backend-scripts.js?') . $this->layout()->cache_bust_index).PHP_EOL;
 

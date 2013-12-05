@@ -6,16 +6,6 @@
  * ************************************************
  */
 
-$logoutUrl = $this->url(
-    'zfcuser/logout',
-    array(),
-    array(
-        'query' => array(
-            'redirect' => $this->url($this->routes['backend']),
-        )
-    )
-);
-
 $this->placeHolder('title')->set('<h2 class="title">'.$this->escapeHtml($this->layout()->title).'</h2>');
 
 if ($this->isGranted('admin')) {
@@ -49,17 +39,17 @@ $this->placeHolder('nav-lang')->captureEnd();
             <?= $this->placeHolder('nav-lang') ?>
             <div class="btn-group">
                 <a class="btn btn-success btn-small btn-icon-text"
-                   href="<?= $this->url($this->routes['frontend']) ?>">
+                   href="<?= $this->url($this->layout()->frontendRoute) ?>">
                     <i class="icon-home icon-white"></i>
                     <span> Frontend</span>
                 </a>
                 <a class="btn btn-info btn-small btn-icon-text"
-                   href="<?= $this->url($this->routes['backend']) ?>">
+                   href="<?= $this->url($this->layout()->backendRoute) ?>">
                     <i class="icon-cog icon-white"></i>
                     <span> Backend</span>
                 </a>
                 <a class="btn btn-danger btn-small btn-icon-text"
-                   href="<?= $logoutUrl ?>">
+                   href="<?= $this->url('zfcuser/logout', [], [ 'query' => [ 'redirect' => $this->url($this->layout()->postLogoutRoute) ] ] ); ?>">
                     <i class="icon-off icon-white"></i>
                     <span> Logout</span>
                 </a>

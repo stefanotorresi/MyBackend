@@ -16,12 +16,9 @@ class Module extends AbstractModule
     {
         $eventManager = $event->getApplication()->getEventManager();
 
-        $routeListener = new Listener\Route();
-        $routeListener->attach($eventManager);
-
-        $renderListener = new Listener\Render();
-        $renderListener->attach($eventManager);
-
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH, [__NAMESPACE__ . '\Listener\Login', 'preDispatch'], 999);
+        $eventManager->attach(new Listener\Login());
+        $eventManager->attach(new Listener\Route());
+        $eventManager->attach(new Listener\Render());
+        $eventManager->attach(new Listener\Error());
     }
 }

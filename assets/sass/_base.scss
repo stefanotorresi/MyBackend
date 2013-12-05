@@ -1,0 +1,106 @@
+
+body {
+  background-color: $bgcolor;
+  font-family: "Source Sans Pro", sans-serif;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  > .container-fluid {
+    margin-top: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    @media (max-width: 320px) {
+      margin-top: 10px;
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+  }
+}
+
+#wrapper {
+  @include border-radius(10);
+  background: white;
+  position: relative;
+  padding: 20px;
+  color: $foreground;
+}
+
+#header {
+  position: relative;
+  margin-bottom: 20px;
+  .title {
+    margin-top: 0;
+    @media (max-width: 767px) {
+      text-align: center;
+    }
+  }
+  > .alert {
+    position: absolute;
+    top: 75%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+    font-size: 1.2em;
+    z-index: 999;
+    ul {
+      list-style: none;
+      margin: 0;
+    }
+  }
+}
+
+#nav-backend {
+  margin: 10px 0;
+  .dropdown .caret {
+    margin-left: 5px;
+  }
+}
+
+#nav-secondary {
+  margin-top: 10px;
+  text-align: right;
+  @media (max-width: 767px) {
+    text-align: center;
+  }
+  @media (max-width: 340px) {
+    .btn > span {
+      display: none;
+    }
+    .btn-icon-text > i {
+      margin-right: 0;
+    }
+  }
+}
+
+ul.dropdown-menu {
+  text-align: left;
+}
+
+.btn-icon-text > i {
+  vertical-align: middle;
+  margin-right: 7px;
+}
+
+.pagination {
+  text-align: center;
+}
+
+form.form-inline {
+  label > span {
+    margin-right: 5px;
+  }
+  .checkbox > span {
+    vertical-align: middle;
+  }
+  .form-errors {
+    font-size: em(11);
+    list-style: none;
+    color: $errorColor;
+    margin: 3px 0 0;
+  }
+}
+
+td.text-right {
+  text-align: right;
+}

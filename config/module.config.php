@@ -8,18 +8,17 @@ return [
      * MyBackend module
      */
     __NAMESPACE__ => [
-        'options' => [
-            'routes' => [
-                'frontend' => 'home',
-                'backend' => 'admin',
-                'login' => 'admin/login',
-            ],
-            'disable_frontend_login' => true,
-        ],
-        'view_params' => [
-            'cache_bust_index' => uniqid(),
-            'title' => 'My Backend',
-        ],
+        /**
+         * these are the defaults provided by ModuleOptions
+         */
+//        'disable_frontend_login'    => true,
+//        'backend_route'             => 'admin',
+//        'frontend_route'            => 'home',
+//        'backend_login_route'       => 'admin/login',
+//        'post_logout_route'         => 'admin',
+//        'template'                  => 'my-backend/layout/layout',
+//        'cache_bust_index'          => uniqid(),
+//        'title'                     => 'My Backend',
     ],
 
     /**

@@ -8,26 +8,31 @@
 
 namespace MyBackend\Listener;
 
-use Zend\Http\Request;
+use MyBackend\Options\ModuleOptions;
+use Zend\EventManager\AbstractListenerAggregate;
+use Zend\EventManager\EventManagerInterface;
+use Zend\Http\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
 use ZfcUser\Controller\UserController;
 
-class Login
+class Login extends AbstractListenerAggregate
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function attach(EventManagerInterface $events)
+    {
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'preDispatch'], 100);
+    }
+
     /**
      * @param  MvcEvent                            $e
      * @return null|\Zend\Stdlib\ResponseInterface
      */
-    public static function preDispatch(MvcEvent $e)
+    public function preDispatch(MvcEvent $e)
     {
-        /** @var \Zend\Mvc\Application $app  */
-        $app    = $e->getTarget();
-        $serviceManager = $app->getServiceManager();
-        $router = $e->getRouter();
+        $router     = $e->getRouter();
         $routeName  = $e->getRouteMatch()->getMatchedRouteName();
-
-        /** @var \MyBackend\Module $module  */
-        $module = $serviceManager->get('ModuleManager')->getModule('MyBackend');
 
         if ($routeName !== UserController::ROUTE_LOGIN) {
             return;
@@ -35,7 +40,7 @@ class Login
 
         $request = $e->getRequest();
 
-        if (! $request instanceof Request) {
+        if (! $request instanceof HttpRequest) {
             return;
         }
 
@@ -45,14 +50,13 @@ class Login
             return;
         }
 
-        $parentRoute            = $module->getOption('routes.backend');
-        $loginRoute             = $module->getOption('routes.login');
-        $disableFrontendLogin   = $module->getOption('disable_frontend_login', false);
+        /** @var ModuleOptions $options  */
+        $options = $e->getApplication()->getServiceManager()->get('MyBackend\Options\ModuleOptions');
 
-        $adminUrl = $router->assemble([], ['name' => $parentRoute]);
+        $adminUrl = $router->assemble([], ['name' => $options->getBackendRoute()]);
 
-        if ($request->getQuery('redirect') === $adminUrl || $disableFrontendLogin) {
-            $url = $router->assemble([], ['name' => $loginRoute]);
+        if ($request->getQuery('redirect') === $adminUrl || $options->getDisableFrontendLogin()) {
+            $url = $router->assemble([], ['name' => $options->getBackendLoginRoute()]);
 
             $response = $e->getResponse();
             $response->getHeaders()->addHeaderLine('Location', $url);

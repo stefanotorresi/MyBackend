@@ -5,7 +5,7 @@
  * ************************************************
  */
 
-namespace MyBackend\Service;
+namespace MyBackend\Navigation;
 
 use MyBackend\BackendModuleInterface;
 use Zend\Navigation\Service\AbstractNavigationFactory;

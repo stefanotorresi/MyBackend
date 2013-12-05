@@ -8,9 +8,9 @@
 namespace MyBackend\Listener;
 
 use MyBackend\Module as MyBackend;
+use MyBackend\Options\ModuleOptions;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
-use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model;
 
@@ -27,29 +27,34 @@ class Render extends AbstractListenerAggregate
 
     public function prepareLayout(MvcEvent $e)
     {
-        $serviceManager = $e->getApplication()->getServiceManager();
-
         $module = $e->getParam('module');
         if (! $module instanceof MyBackend) {
             return;
         }
 
-        $rootModel = $e->getViewModel();
-        if (! $rootModel instanceof Model\ViewModel) {
+        $layoutModel = $e->getViewModel();
+        if (! $layoutModel instanceof Model\ViewModel) {
             return;
         }
 
-        $rootModel->setVariables($module->getOptions('view_params'));
+        $serviceManager = $e->getApplication()->getServiceManager();
 
-        if ($e->isError()) {
-            $rootModel->error = true;
-        }
+        /** @var ModuleOptions $options  */
+        $options    = $serviceManager->get('MyBackend\Options\ModuleOptions');
 
-        if ($rootModel->terminate()) {
-            return;
-        }
+        $layoutModel->setVariables([
+            'title'             => $options->getTitle(),
+            'cacheBustIndex'    => $options->getCacheBustIndex(),
+            'backendRoute'      => $options->getBackendRoute(),
+            'frontendRoute'     => $options->getFrontendRoute(),
+            'backendLoginRoute' => $options->getBackendLoginRoute(),
+            'postLogoutRoute'   => $options->getPostLogoutRoute(),
+            'error'             => $e->isError(),
+            'i18nEnabled'       => (bool) $serviceManager->get('ModuleManager')->getModule('MyI18n'),
+        ]);
+        $layoutModel->setTemplate($options->getTemplate());
 
-        $translatorDomain = 'MyBackend';
+        $translatorDomain = $options->getTranslatorTextDomain();
 
         $viewHelperManager = $serviceManager->get('ViewHelperManager');
         $viewHelperManager->get('translate')->setTranslatorTextDomain($translatorDomain);
@@ -59,23 +64,6 @@ class Render extends AbstractListenerAggregate
         $viewHelperManager->get('flashmessenger')->setTranslatorTextDomain($translatorDomain);
         $viewHelperManager->get('ztbnavigation')->setTranslatorTextDomain($translatorDomain);
         $viewHelperManager->get('headtitle')->setTranslatorTextDomain($translatorDomain);
-
-        $rootModel->displayLangNav = $serviceManager->has('nav-lang');
-        $rootModel->setTemplate('my-backend/layout/layout');
-
-        $header = new Model\ViewModel();
-        $header->setTemplate('my-backend/layout/header');
-        $header->setVariable('routes', $module->getOption('routes'));
-
-        $footer = new Model\ViewModel();
-        $footer->setTemplate('my-backend/layout/footer');
-
-        $javascript = new Model\ViewModel();
-        $javascript->setTemplate('my-backend/layout/javascript');
-
-        $rootModel->addChild($header, 'header')
-            ->addChild($footer, 'footer')
-            ->addChild($javascript, 'javascript');
     }
 
 }

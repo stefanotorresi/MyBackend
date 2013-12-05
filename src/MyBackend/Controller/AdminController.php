@@ -8,12 +8,18 @@
 
 namespace MyBackend\Controller;
 
+use MyBackend\Options\ModuleOptions;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
 class AdminController extends AbstractActionController
 {
+    /**
+     * @var ModuleOptions $moduleOptions
+     */
+    protected $moduleOptions;
+
     public function indexAction()
     {
         return false;
@@ -21,23 +27,21 @@ class AdminController extends AbstractActionController
 
     public function loginAction()
     {
-        /** @var \MyBackend\Module $module  */
-        $module = $this->getServiceLocator()->get('ModuleManager')->getModule('MyBackend');
-        $parentRoute = $module->getOption('routes.backend');
+        $backendRoute = $this->getModuleOptions()->getBackendRoute();
 
         /** @var \ZfcUser\Options\ModuleOptions $zfcUserOptions  */
         $zfcUserOptions = $this->getServiceLocator()->get('zfcuser_module_options');
-        $zfcUserOptions->setLoginRedirectRoute($parentRoute);
+        $zfcUserOptions->setLoginRedirectRoute($backendRoute);
 
         $controller = $this;
         $this->getEvent()->getApplication()->getEventManager()->attach(
             MvcEvent::EVENT_RENDER,
-            function(MvcEvent $e) use ($controller, $parentRoute) {
+            function(MvcEvent $e) use ($controller, $backendRoute) {
                 foreach ($e->getViewModel()->getIterator() as $child) {
                     /** @var ViewModel $child  */
                     if ($child->captureTo() === 'content') {
                         $child->setTemplate('my-backend/login');
-                        $child->redirect = $controller->url()->fromRoute($parentRoute);
+                        $child->setVariable('redirect', $controller->url()->fromRoute($backendRoute));
                     }
                 }
             },
@@ -45,5 +49,25 @@ class AdminController extends AbstractActionController
         );
 
         return $this->forward()->dispatch('zfcuser');
+    }
+
+    /**
+     * @return \MyBackend\Options\ModuleOptions
+     */
+    public function getModuleOptions()
+    {
+        if (! $this->moduleOptions) {
+            $this->moduleOptions = $this->getServiceLocator()->get('MyBackend\Options\ModuleOptions');
+        }
+
+        return $this->moduleOptions;
+    }
+
+    /**
+     * @param \MyBackend\Options\ModuleOptions $moduleOptions
+     */
+    public function setModuleOptions($moduleOptions)
+    {
+        $this->moduleOptions = $moduleOptions;
     }
 }
