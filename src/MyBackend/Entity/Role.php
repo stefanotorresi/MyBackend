@@ -44,7 +44,7 @@ class Role extends AbstractRole
     /**
      * @var PermissionInterface[]|Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions")
+     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions", cascade={"persist"})
      * @ORM\JoinTable(name="mbe_roles_permissions")
      */
     protected $permissions;

@@ -109,6 +109,31 @@ return [
         ],
     ],
 
+    'console' => [
+        'router' => [
+            'routes' => [
+                'user-create-admin' => [
+                    'options' => [
+                        'route' => 'user create-admin [--username=] [--email=]',
+                        'defaults' => [
+                            'controller' => __NAMESPACE__ . '\Controller\UserConsoleController',
+                            'action' => 'create-admin',
+                        ],
+                    ],
+                ],
+                'user-delete' => [
+                    'options' => [
+                        'route' => 'user delete [--username=] [--email=]',
+                        'defaults' => [
+                            'controller' => __NAMESPACE__ . '\Controller\UserConsoleController',
+                            'action' => 'delete',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+
     'view_manager' => [
         'template_path_stack' => [
             __DIR__ . '/../view',
@@ -117,22 +142,25 @@ return [
 
     'service_manager' => [
         'factories' => [
-            'MyBackend\Options\ModuleOptions' => 'MyBackend\Options\ModuleOptionsFactory',
-            'nav-backend' => __NAMESPACE__ . '\Service\BackendNavigationFactory',
+            'MyBackend\Options\ModuleOptions'   => 'MyBackend\Options\ModuleOptionsFactory',
+            'zfcuser_user_mapper'               => 'MyBackend\Mapper\UserMapperFactory',
+            'nav-backend'                       => 'MyBackend\Service\BackendNavigationFactory',
         ],
         'aliases' => [
+            'MyBackend\Mapper\UserMapper' => 'zfcuser_user_mapper',
+
             // this is needed by ZfcRbac
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
 
             // these are needed by ZfcUser
             'zfcuser_zend_db_adapter' => 'Zend\Db\Adapter\Adapter',
-            'zfcuser_doctrine_em' => 'Doctrine\ORM\EntityManager',
         ],
     ],
 
     'controllers' => [
         'invokables' => [
             'admin' => 'MyBackend\Controller\AdminController',
+            'MyBackend\Controller\UserConsoleController' => 'MyBackend\Controller\UserConsoleController',
         ],
     ],
 
