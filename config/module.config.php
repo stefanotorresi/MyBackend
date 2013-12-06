@@ -75,7 +75,7 @@ return [
         ]
     ],
     'data-fixture' => [
-        __NAMESPACE__ . '_fixtures' => __DIR__ . '/../resources/fixtures',
+        __NAMESPACE__ . '_fixtures' => __DIR__ . '/../src/' . __NAMESPACE__ . '/Entity/Fixture',
     ],
 
     /**

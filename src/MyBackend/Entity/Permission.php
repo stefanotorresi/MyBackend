@@ -80,13 +80,11 @@ class Permission implements PermissionInterface
     }
 
     /**
-     * Add a role
-     * @param  $role
-     * @return void
+     * @param Role $role
      */
-    public function addRole($role)
+    public function addRole(Role $role)
     {
-        $this->roles[] = $role;
+        $this->roles->add($role);
     }
 
     /**
