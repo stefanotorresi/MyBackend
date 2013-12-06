@@ -1,41 +1,57 @@
 <?php
 /**
- *
- * @author Stefano Torresi (http://stefanotorresi.it)
+ * @author  ZF-Commons
  * @license See the file LICENSE.txt for copying permission.
  * ************************************************
  */
 
 namespace MyBackend\Entity;
 
+use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use ZfcRbac\Permission\PermissionInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="mbe_permissions")
  */
-class Permission
+class Permission implements PermissionInterface
 {
     /**
+     * @var int|null
+     *
      * @ORM\Id
-     * @ORM\Column(type="integer", name="permission_id");
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @var int
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=100, unique=true);
-     * @var string
+     * @var string|null
+     *
+     * @ORM\Column(type="string", length=32)
      */
     protected $name;
 
+    /**
+     * @var Role[]|Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Role", mappedBy="permissions")
+     */
+    protected $roles;
+
+    /**
+     * Constructor
+     */
     public function __construct($name)
     {
-        $this->name = $name;
+        $this->setName($name);
+        $this->roles = new Collections\ArrayCollection();
     }
 
     /**
+     * Get the permission identifier
+     *
      * @return int
      */
     public function getId()
@@ -44,6 +60,19 @@ class Permission
     }
 
     /**
+     * Set the permission name
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function setName($name)
+    {
+        $this->name = (string) $name;
+    }
+
+    /**
+     * Get the permission name
+     *
      * @return string
      */
     public function getName()
@@ -52,13 +81,20 @@ class Permission
     }
 
     /**
-     * @param string $name
-     * @return $this
+     * @param Role $role
      */
-    public function setName($name)
+    public function addRole(Role $role)
     {
-        $this->name = $name;
+        $this->roles->add($role);
+    }
 
-        return $this;
+    /**
+     * Get the roles
+     *
+     * @return Role[]
+     */
+    public function getRoles()
+    {
+        return $this->roles;
     }
 }

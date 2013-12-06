@@ -13,7 +13,7 @@ if ($this->isGranted('admin')) {
 }
 
 $this->placeHolder('nav-lang')->captureStart();
-if ($this->layout()->displayLangNav) :
+if ($this->layout()->i18nEnabled) :
     ?>
     <div class="btn-group">
         <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">

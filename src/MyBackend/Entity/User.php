@@ -24,7 +24,7 @@ class User extends ZfcUser implements IdentityInterface
      * @ORM\JoinTable(
      *      name="mbe_users_roles",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="role_id")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
      * @var ArrayCollection
      */

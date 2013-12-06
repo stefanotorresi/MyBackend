@@ -24,7 +24,7 @@ $this->headLink()
 // any other script is included in at the bottom of the DOM, inside 'javascript.phtml' template
 $this->headScript()->prependFile($this->basePath('js/header-scripts.js?').$this->layout()->cache_bust_index);
 
-$bodyClass = (isset($this->error) ? 'error' : $this->layout()->bodyClass);
+$bodyClass = ($this->error ? 'error' : $this->layout()->bodyClass);
 
 ?>
 <?= $this->doctype().PHP_EOL ?>

@@ -86,20 +86,23 @@ ul.dropdown-menu {
   text-align: center;
 }
 
-form.form-inline {
-  label > span {
-    margin-right: 5px;
-  }
-  .checkbox > span {
-    vertical-align: middle;
+form {
+  &.form-inline {
+    label > span {
+      margin-right: 5px;
+    }
+    .checkbox > span {
+      vertical-align: middle;
+    }
   }
   .form-errors {
     font-size: em(11);
     list-style: none;
-    color: $errorColor;
+    color: $errorText;
     margin: 3px 0 0;
   }
 }
+
 
 td.text-right {
   text-align: right;

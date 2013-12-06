@@ -64,6 +64,7 @@ class Render extends AbstractListenerAggregate
         $viewHelperManager->get('flashmessenger')->setTranslatorTextDomain($translatorDomain);
         $viewHelperManager->get('ztbnavigation')->setTranslatorTextDomain($translatorDomain);
         $viewHelperManager->get('headtitle')->setTranslatorTextDomain($translatorDomain);
+        $viewHelperManager->get('formElementErrors')->setTranslatorTextDomain($translatorDomain);
     }
 
 }

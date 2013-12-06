@@ -24,10 +24,7 @@
         "zf-commons/zfc-user-doctrine-orm": "0.*",
         "zf-commons/zfc-rbac": "1.*@dev",
         "mwillbanks/zfc-twitter-bootstrap": "dev-master",
-        "rwoverdijk/assetmanager": "1.*"
-    },
-    "require-dev": {
-        "doctrine/data-fixtures": "dev-master",
+        "rwoverdijk/assetmanager": "1.*",
         "hounddog/doctrine-data-fixture-module": "*"
     },
     "extra": {
