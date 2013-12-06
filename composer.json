@@ -20,12 +20,14 @@
     ],
     "require": {
         "php": ">5.4.1",
-        "stefanotorresi/my-base": "1.*@dev",
-        "zf-commons/zfc-user-doctrine-orm": "0.*",
-        "zf-commons/zfc-rbac": "1.*@dev",
+        "doctrine/doctrine-module": "~0.8@dev",
+        "doctrine/doctrine-orm-module": "~0.8@dev",
+        "hounddog/doctrine-data-fixture-module": "0.*",
         "mwillbanks/zfc-twitter-bootstrap": "dev-master",
         "rwoverdijk/assetmanager": "1.*",
-        "hounddog/doctrine-data-fixture-module": "*"
+        "stefanotorresi/my-base": "1.*@dev",
+        "zf-commons/zfc-rbac": "1.0.*@dev",
+        "zf-commons/zfc-user-doctrine-orm": "0.*"
     },
     "extra": {
         "branch-alias": {
