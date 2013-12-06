@@ -7,9 +7,7 @@
 
 namespace MyBackend\Navigation;
 
-use MyBackend\BackendModuleInterface;
 use Zend\Navigation\Service\AbstractNavigationFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 class BackendNavigationFactory extends AbstractNavigationFactory
 {

@@ -36,7 +36,7 @@ class AdminController extends AbstractActionController
         $controller = $this;
         $this->getEvent()->getApplication()->getEventManager()->attach(
             MvcEvent::EVENT_RENDER,
-            function(MvcEvent $e) use ($controller, $backendRoute) {
+            function (MvcEvent $e) use ($controller, $backendRoute) {
                 foreach ($e->getViewModel()->getIterator() as $child) {
                     /** @var ViewModel $child  */
                     if ($child->captureTo() === 'content') {
