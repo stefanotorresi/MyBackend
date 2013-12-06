@@ -52,8 +52,9 @@ class Role extends AbstractRole
     /**
      * Init the Doctrine collection
      */
-    public function __construct()
+    public function __construct($name)
     {
+        $this->setName($name);
         $this->permissions = new Collections\ArrayCollection();
     }
 
@@ -118,9 +119,7 @@ class Role extends AbstractRole
     public function addPermission($permission)
     {
         if (is_string($permission)) {
-            $name       = $permission;
-            $permission = new Permission();
-            $permission->setName($name);
+            $permission = new Permission($permission);
         }
 
         $permission->addRole($this);

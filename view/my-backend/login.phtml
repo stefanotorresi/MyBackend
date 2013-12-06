@@ -7,8 +7,6 @@
  * ************************************************
  */
 
-use MyBackend\Listener\Route;
-
 $this->layout()->bodyClass = 'login';
 
 $form = $this->loginForm;
@@ -31,8 +29,6 @@ $this->formElementErrors()->setAttributes(array('class' => 'form-errors'));
 <?= $this->form()->openTag($form) ?>
 
 <dl>
-    <?= $this->formElementErrors($form->get('identity')) ?>
-
     <dt><?= $this->formLabel($form->get('identity')) ?></dt>
     <dd><?= $this->formInput($form->get('identity')) ?></dd>
 
@@ -47,5 +43,7 @@ $this->formElementErrors()->setAttributes(array('class' => 'form-errors'));
         <?= $this->formButton($form->get('submit')) ?>
     </dd>
 </dl>
+
+<?= $this->formElementErrors($form) ?>
 
 <?= $this->form()->closeTag() ?>

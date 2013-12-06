@@ -17,4 +17,6 @@ return [
     'Replace' => 'Sostituisci',
     'Remove' => 'Rimuovi',
     'Update' => 'Aggiorna',
+    'Username or Email' => 'Nome utente o Email',
+    'Authentication failed. Please try again.' => 'Authenticazione fallita. Riprovare.',
 ];

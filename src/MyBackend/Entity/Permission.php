@@ -43,8 +43,9 @@ class Permission implements PermissionInterface
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($name)
     {
+        $this->setName($name);
         $this->roles = new Collections\ArrayCollection();
     }
 

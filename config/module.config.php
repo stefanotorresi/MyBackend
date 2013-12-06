@@ -28,8 +28,8 @@ return [
         'protection_policy' => 'allow',
         'guards' => [
             'ZfcRbac\Guard\RouteGuard' => [
-                'admin*' => ['admin'],
                 'admin/login'=> ['guest'],
+                'admin*' => ['admin'],
             ],
         ],
         'role_providers' => [
