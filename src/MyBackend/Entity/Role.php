@@ -30,7 +30,7 @@ class Role extends AbstractRole
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=32, unique=true)
      */
     protected $name;
 
@@ -44,7 +44,7 @@ class Role extends AbstractRole
     /**
      * @var PermissionInterface[]|Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions")
+     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="permissions", cascade={"persist"})
      * @ORM\JoinTable(name="mbe_roles_permissions")
      */
     protected $permissions;
