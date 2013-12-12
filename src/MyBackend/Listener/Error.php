@@ -14,6 +14,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use ZfcRbac\Exception\UnauthorizedExceptionInterface;
+use ZfcRbac\Service\AuthorizationService;
 
 class Error extends AbstractListenerAggregate
 {
@@ -44,18 +45,26 @@ class Error extends AbstractListenerAggregate
         $serviceManager = $event->getApplication()->getServiceManager();
         $routeName      = $event->getRouteMatch()->getMatchedRouteName();
 
+        /** @var AuthorizationService $authorizationService */
+        $authorizationService = $serviceManager->get('ZfcRbac\Service\AuthorizationService');
+        $adminGranted = $authorizationService->isGranted('admin');
+
         /** @var ModuleOptions $options  */
         $options = $serviceManager->get('MyBackend\Options\ModuleOptions');
-
         $loginRoute = $options->getBackendLoginRoute();
+        $backendRoute = $options->getBackendRoute();
 
-        if ($routeName === $loginRoute) {
+        if ($routeName === $loginRoute && ! $adminGranted) {
             return;
         }
 
         $router = $event->getRouter();
 
-        $url = $router->assemble([], ['name' => $loginRoute]);
+        if ($routeName === $loginRoute && $adminGranted) {
+            $url = $router->assemble([], ['name' => $backendRoute]);
+        } else {
+            $url = $router->assemble([], ['name' => $loginRoute]);
+        }
 
         $response = $event->getResponse();
         $response->getHeaders()->addHeaderLine('Location', $url);

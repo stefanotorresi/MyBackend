@@ -30,7 +30,7 @@ class Role extends AbstractRole
     /**
      * @var string|null
      *
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=32, unique=true)
      */
     protected $name;
 

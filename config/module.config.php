@@ -21,6 +21,12 @@ return [
 //        'title'                     => 'My Backend',
     ],
 
+    'navigation' => [
+        'backend' => [
+
+        ],
+    ],
+
     /**
      * ZfcRbac module
      */
@@ -114,10 +120,10 @@ return [
             'routes' => [
                 'user-create-admin' => [
                     'options' => [
-                        'route' => 'user create-admin [--username=] [--email=]',
+                        'route' => 'user create [--username=] [--email=] [--roles=]',
                         'defaults' => [
                             'controller' => __NAMESPACE__ . '\Controller\UserConsoleController',
-                            'action' => 'create-admin',
+                            'action' => 'create',
                         ],
                     ],
                 ],
@@ -141,10 +147,14 @@ return [
     ],
 
     'service_manager' => [
+        'invokables' => [
+            'zfcuser_user_service'              => 'MyBackend\Service\UserService',
+        ],
         'factories' => [
             'MyBackend\Options\ModuleOptions'   => 'MyBackend\Options\ModuleOptionsFactory',
             'zfcuser_user_mapper'               => 'MyBackend\Mapper\UserMapperFactory',
-            'nav-backend'                       => 'MyBackend\Service\BackendNavigationFactory',
+            'MyBackend\Mapper\RoleMapper'       => 'MyBackend\Mapper\DoctrineRoleMapperFactory',
+            'nav-backend'                       => 'MyBackend\Navigation\BackendNavigationFactory',
         ],
         'aliases' => [
             'MyBackend\Mapper\UserMapper' => 'zfcuser_user_mapper',

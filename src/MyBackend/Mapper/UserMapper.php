@@ -10,7 +10,7 @@ namespace MyBackend\Mapper;
 use MyBackend\Entity\User;
 use ZfcUserDoctrineORM\Mapper\User as DoctrineUserMapper;
 
-class UserMapper extends DoctrineUserMapper
+class UserMapper extends DoctrineUserMapper implements DeleteCapableUserMapper
 {
     public function delete($whereOrEntity, $tableName = null)
     {

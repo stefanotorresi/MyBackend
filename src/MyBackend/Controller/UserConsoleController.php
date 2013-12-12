@@ -7,14 +7,16 @@
 
 namespace MyBackend\Controller;
 
+use MyBackend\Mapper\DeleteCapableUserMapper;
+use MyBackend\Service\Exception\UserServiceException;
 use MyBase\Controller\AbstractConsoleController;
 use MyBackend\Entity;
+use MyBackend\Service\UserService;
 use Zend\Console\Adapter\Posix;
-use Zend\Console\ColorInterface;
+use Zend\Console\ColorInterface as Color;
 use Zend\Console\Console;
 use Zend\Console\Prompt;
 use Zend\Permissions\Rbac\Rbac;
-use ZfcUser\Service\User as UserService;
 
 class UserConsoleController extends AbstractConsoleController
 {
@@ -28,24 +30,41 @@ class UserConsoleController extends AbstractConsoleController
      */
     protected $rbac;
 
-    public function createAdminAction()
+    /**
+     *
+     */
+    public function createAction()
     {
-        $username       = $this->params('username') ?: Prompt\Line::prompt('Please enter a username: ');
-        $email          = $this->params('email') ?: Prompt\Line::prompt('Please enter an email: ');
+        $username       = $this->params('username') ?: Prompt\Line::prompt('Please enter a username: ', false, 255);
+        $email          = $this->params('email') ?: Prompt\Line::prompt('Please enter an email: ', false, 255);
         $displayName    = $this->getUserService()->getOptions()->getEnableDisplayName() ?
-            Prompt\Line::prompt('Please enter a display name: ') : null;
+            Prompt\Line::prompt('Please enter a display name: ', false, 50) : null;
 
-        $console = Console::getInstance();
+        $console = $this->getConsole();
+
         if ($console instanceof Posix) {
             shell_exec('stty -echo');
         }
+
         $password       = Prompt\Line::prompt('Please enter a password: ');
+        $console->writeLine();
         $passwordVerify = Prompt\Line::prompt('Please confirm the password: ');
-        shell_exec('stty echo');
 
-        $console->showCursor();
+        if ($console instanceof Posix) {
+            shell_exec('stty echo');
+        }
 
-        $admin = $this->getUserService()->register([
+        $console->writeLine();
+
+        $roles = $this->params('roles') ?: Prompt\Line::prompt('Please enter a comma separated list of user roles: [guest] ', true, 32);
+        if (empty($roles)) {
+            $roles = 'guest';
+        }
+
+        $roles = explode(',', $roles);
+
+        /** @var Entity\User $user */
+        $user = $this->getUserService()->register([
             'username'          => $username,
             'email'             => $email,
             'display_name'      => $displayName,
@@ -53,31 +72,41 @@ class UserConsoleController extends AbstractConsoleController
             'passwordVerify'    => $passwordVerify,
         ]);
 
-        if (! $admin) {
+        if (! $user) {
 
-            $output[] = PHP_EOL.PHP_EOL.$console->colorize('Invalid data provided', ColorInterface::RED).PHP_EOL;
+            $console->writeLine(PHP_EOL.'Invalid data provided', Color::RED);
 
             $form = $this->getUserService()->getRegisterForm();
 
             foreach ($form->getMessages() as $field => $messages) {
                 foreach ($messages as $message) {
-                    $output[] = $form->get($field)->getLabel(). ': '.$message;
+                    $console->writeLine($form->get($field)->getLabel(). ': '.$message);
                 }
             }
 
-            return implode(PHP_EOL, $output).PHP_EOL;
+            return;
         }
 
-        $adminRole = $this->getRbac()->getRole('admin');
+        $userMapper = $this->getUserService()->getUserMapper();
 
-        if (! $adminRole) {
-            return "'admin' role not found. Did you run 'data-fixture:import' ?";
+        try {
+            $this->getUserService()->addRolesToUser($roles, $user);
+        } catch(\Exception $e) {
+            if ($userMapper instanceof DeleteCapableUserMapper) {
+                $userMapper->delete($user); // rollback if we can't update user with roles
+            }
+
+            if ($e instanceof UserServiceException) {
+                $console->writeLine();
+                $console->writeLine("Error: ".$e->getMessage(), Color::RED);
+
+                return;
+            }
+            throw $e;
         }
 
-        $admin->addRole($adminRole);
-        $this->getUserService()->getUserMapper()->update($admin);
-
-        return PHP_EOL.PHP_EOL.$console->colorize(sprintf('User \'%s\' added', $username), ColorInterface::GREEN);
+        $console->writeLine();
+        $console->writeLine(sprintf('User \'%s\' added', $username), Color::GREEN);
     }
 
     public function deleteAction()
@@ -123,34 +152,36 @@ class UserConsoleController extends AbstractConsoleController
         }
 
         if (! $user instanceof Entity\User) {
-            return PHP_EOL.$console->colorize('User not found', ColorInterface::RED).PHP_EOL;
+            $console->writeLine(PHP_EOL.'User not found', Color::RED);
+            return;
         }
 
-        echo
+        $console->writeLine(
             "User found".PHP_EOL
             ." Id: \t\t"            .$user->getId().PHP_EOL
             ." Username: \t"        .$user->getUsername().PHP_EOL
             ." Email: \t"           .$user->getEmail().PHP_EOL
             ." Display name: \t"    .$user->getDisplayName().PHP_EOL
             ." State: \t"           .$user->getState().PHP_EOL
-            ." Roles: \t"           .implode(', ',$user->getRoles()).PHP_EOL.PHP_EOL
-        ;
+            ." Roles: \t"           .implode(', ',$user->getRoles())
+        );
 
         $confirm = Prompt\Confirm::prompt($console->colorize(
-            'Are you sure you want to delete this user? [y/n]',
-            ColorInterface::YELLOW
+            PHP_EOL.'Are you sure you want to delete this user? [y/n]',
+            Color::YELLOW
         ));
 
         if (! $confirm) {
-            return PHP_EOL.$console->colorize('Aborted', ColorInterface::LIGHT_RED).PHP_EOL;
+            $console->writeLine(PHP_EOL.'Aborted', Color::LIGHT_RED);
+            return;
         }
 
         $this->getUserService()->getUserMapper()->delete($user);
 
-        return PHP_EOL.$console->colorize(
-            sprintf("User '%s' deleted", $user->getUsername()),
-            ColorInterface::GREEN
-        ).PHP_EOL;
+        $console->writeLine(
+            PHP_EOL.sprintf("User '%s' deleted", $user->getUsername()),
+            Color::GREEN
+        );
     }
 
     /**
@@ -174,7 +205,7 @@ class UserConsoleController extends AbstractConsoleController
     }
 
     /**
-     * @return \Zend\Permissions\Rbac\Rbac
+     * @return Rbac
      */
     public function getRbac()
     {
@@ -186,7 +217,7 @@ class UserConsoleController extends AbstractConsoleController
     }
 
     /**
-     * @param \Zend\Permissions\Rbac\Rbac $rbac
+     * @param Rbac $rbac
      */
     public function setRbac($rbac)
     {
