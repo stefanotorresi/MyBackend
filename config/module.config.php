@@ -23,7 +23,6 @@ return [
 
     'navigation' => [
         'backend' => [
-
         ],
     ],
 
@@ -151,19 +150,19 @@ return [
             'zfcuser_user_service'              => 'MyBackend\Service\UserService',
         ],
         'factories' => [
-            'MyBackend\Options\ModuleOptions'   => 'MyBackend\Options\ModuleOptionsFactory',
-            'zfcuser_user_mapper'               => 'MyBackend\Mapper\UserMapperFactory',
-            'MyBackend\Mapper\RoleMapper'       => 'MyBackend\Mapper\DoctrineRoleMapperFactory',
-            'nav-backend'                       => 'MyBackend\Navigation\BackendNavigationFactory',
+            'MyBackend\Options\ModuleOptions'           => 'MyBackend\Options\ModuleOptionsFactory',
+            'zfcuser_user_mapper'                       => 'MyBackend\Mapper\UserMapperFactory',
+            'MyBackend\Mapper\RoleMapper'               => 'MyBackend\Mapper\DoctrineRoleMapperFactory',
+            'MyBackend\Navigation\BackendNavigation'    => 'MyBackend\Navigation\BackendNavigationFactory',
+            'MyBackend\Navigation\BackendBreadcrumbs'   => 'MyBackend\Navigation\BackendBreadcrumbsFactory',
         ],
         'aliases' => [
-            'MyBackend\Mapper\UserMapper' => 'zfcuser_user_mapper',
+            'MyBackend\Mapper\UserMapper'               => 'zfcuser_user_mapper',
 
             // this is needed by ZfcRbac
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
-
             // these are needed by ZfcUser
-            'zfcuser_zend_db_adapter' => 'Zend\Db\Adapter\Adapter',
+            'zfcuser_zend_db_adapter'                   => 'Zend\Db\Adapter\Adapter',
         ],
     ],
 

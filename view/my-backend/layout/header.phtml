@@ -75,13 +75,13 @@ $this->placeHolder('nav-lang')->captureEnd();
                 <span class="icon-bar"></span>
             </a>
             <div class="nav-collapse collapse">
-                <?= $this->ztbnavigation('nav-backend')->ztbmenu()->setMaxDepth(1) ?>
+                <?= $this->ztbnavigation('MyBackend\Navigation\BackendNavigation')->ztbmenu()->setMaxDepth(1) ?>
             </div>
         </div>
     </nav>
 
     <nav id="breadcrumbs">
-        <?= $this->ztbnavigation('nav-backend')->ztbbreadcrumbs()->setTranslator(
+        <?= $this->ztbnavigation('MyBackend\Navigation\BackendBreadcrumbs')->ztbbreadcrumbs()->setTranslator(
                 $this->plugin('translate')->getTranslator(),
                 'MyBackend'
             ); ?>
