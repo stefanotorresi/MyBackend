@@ -38,10 +38,13 @@ class BackendBreadcrumbsFactory implements FactoryInterface
         $home = new MvcPage([
             'label'         => 'Backend',
             'route'         => $options->getBackendRoute(),
-            'pages'         => $navBackend->getPages(),
             'router'        => $router,
             'routeMatch'    => $routeMatch
         ]);
+
+        foreach ($navBackend->getPages() as $page) {
+            $home->addPage(clone $page);
+        }
 
         $pages = [$home];
 
