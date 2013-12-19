@@ -1,0 +1,43 @@
+<?php
+/**
+ * @var \Zend\View\Renderer\PhpRenderer $this
+ * @author Stefano Torresi (http://stefanotorresi.it)
+ * @license See the file LICENSE.txt for copying permission.
+ * ************************************************
+ */
+
+use Zend\Mvc\Controller\Plugin\FlashMessenger;
+
+$currentErrorMessages = $this->flashMessenger()->getCurrentMessagesFromNamespace(FlashMessenger::NAMESPACE_ERROR);
+$pastErrorMessages = $this->flashMessenger(FlashMessenger::NAMESPACE_ERROR);
+
+if ($currentErrorMessages) {
+    $errorMessages = array_merge($pastErrorMessages, $currentErrorMessages);
+    $this->flashMessenger()->clearCurrentMessagesFromNamespace(FlashMessenger::NAMESPACE_ERROR);
+} else {
+    $errorMessages = $pastErrorMessages;
+}
+
+?>
+
+<?php if ($errorMessages) : ?>
+    <div class="alert fade in alert-error">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4 class="alert-heading">Oops!</h4>
+        <ul>
+        <?php
+        foreach ($errorMessages as $errorMessage) :
+            echo sprintf("<li>%s</li>", $this->escapeHtml($errorMessage));
+        endforeach;
+        ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
+<?php if ($this->flashMessenger(FlashMessenger::NAMESPACE_SUCCESS)) : ?>
+    <div class="alert fade in alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h4 class="alert-heading">Ok!</h4>
+        <?= $this->flashMessenger()->render(FlashMessenger::NAMESPACE_SUCCESS) ?>
+    </div>
+<?php endif; ?>
