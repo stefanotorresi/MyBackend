@@ -43,7 +43,7 @@ class BackendBreadcrumbsFactory implements FactoryInterface
         ]);
 
         foreach ($navBackend->getPages() as $page) {
-            $home->addPage(clone $page);
+            $home->addPage($page->toArray());
         }
 
         $pages = [$home];
