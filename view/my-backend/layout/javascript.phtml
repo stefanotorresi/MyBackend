@@ -14,5 +14,5 @@ $applicationConfig = array(
 
 echo $this->inlineScript()
         ->prependScript('app = new Backend('. Json::encode($applicationConfig) .');')
-        ->prependFile($this->basePath('js/backend-scripts.js?') . $this->layout()->cache_bust_index).PHP_EOL;
+        ->prependFile($this->basePath('js/backend-scripts.js?') . $this->layout()->cacheBustIndex).PHP_EOL;
 
