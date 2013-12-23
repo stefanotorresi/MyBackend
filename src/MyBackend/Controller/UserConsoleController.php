@@ -91,7 +91,7 @@ class UserConsoleController extends AbstractConsoleController
 
         try {
             $this->getUserService()->addRolesToUser($roles, $user);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             if ($userMapper instanceof DeleteCapableUserMapper) {
                 $userMapper->delete($user); // rollback if we can't update user with roles
             }
@@ -153,6 +153,7 @@ class UserConsoleController extends AbstractConsoleController
 
         if (! $user instanceof Entity\User) {
             $console->writeLine(PHP_EOL.'User not found', Color::RED);
+
             return;
         }
 
@@ -173,6 +174,7 @@ class UserConsoleController extends AbstractConsoleController
 
         if (! $confirm) {
             $console->writeLine(PHP_EOL.'Aborted', Color::LIGHT_RED);
+
             return;
         }
 

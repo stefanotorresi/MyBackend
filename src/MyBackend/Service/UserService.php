@@ -38,7 +38,7 @@ class UserService extends ZfcUserService
 
     public function addRolesToUser($roles, User $user, $update = true)
     {
-        foreach($roles as $role) {
+        foreach ($roles as $role) {
             $this->addRoleToUser($role, $user, false);
         }
 
@@ -55,6 +55,7 @@ class UserService extends ZfcUserService
         if (null === $this->roleMapper) {
             $this->roleMapper = $this->getServiceManager()->get('MyBackend\Mapper\RoleMapper');
         }
+
         return $this->roleMapper;
     }
 
