@@ -9,13 +9,12 @@
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
 
 $currentErrorMessages = $this->flashMessenger()->getCurrentMessagesFromNamespace(FlashMessenger::NAMESPACE_ERROR);
-$pastErrorMessages = $this->flashMessenger(FlashMessenger::NAMESPACE_ERROR);
 
 if ($currentErrorMessages) {
-    $errorMessages = array_merge($pastErrorMessages, $currentErrorMessages);
+    $errorMessages = $currentErrorMessages;
     $this->flashMessenger()->clearCurrentMessagesFromNamespace(FlashMessenger::NAMESPACE_ERROR);
 } else {
-    $errorMessages = $pastErrorMessages;
+    $errorMessages = $this->flashMessenger(FlashMessenger::NAMESPACE_ERROR);
 }
 
 ?>
