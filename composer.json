@@ -19,8 +19,8 @@
         }
     ],
     "require": {
-        "zf-commons/zfc-user-doctrine-orm": "*",
-        "zf-commons/zfc-rbac": "*",
+        "zf-commons/zfc-user-doctrine-orm": "~0.1",
+        "zf-commons/zfc-rbac": "~0.2.2",
         "mwillbanks/zfc-twitter-bootstrap": "dev-master"
     },
     "require-dev": {
