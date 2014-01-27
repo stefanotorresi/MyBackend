@@ -20,8 +20,8 @@
     ],
     "require": {
         "php": ">5.4.1",
-        "doctrine/doctrine-module": "~0.8@dev",
-        "doctrine/doctrine-orm-module": "~0.8@dev",
+        "doctrine/doctrine-module": "~0.8",
+        "doctrine/doctrine-orm-module": "~0.8",
         "hounddog/doctrine-data-fixture-module": "0.*",
         "mwillbanks/zfc-twitter-bootstrap": "dev-master",
         "rwoverdijk/assetmanager": "1.*",
