@@ -6,8 +6,7 @@ $overlayColor: #EDEDED !default;
 
 // boilerplate
 @import '../../../../../assets/vendor/yatsatrap/sass/bootstrap';
-@import '../../../../../assets/sass/mixins';
-@import '../../../../../assets/sass/helpers';
+@import '../../../../../assets/vendor/my-sass-boilerplate/my-sass-boilerplate';
 
 // blocks
 @import 'base';
