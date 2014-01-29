@@ -9,10 +9,9 @@
 use Zend\Json\Json;
 
 $applicationConfig = array(
-    'homeUrl' => $this->url('admin', [], ['force_canonical' => true]),
+    'homeUrl' => $this->url('home', [], ['force_canonical' => true]),
 );
 
 echo $this->inlineScript()
         ->prependScript('app = new Backend('. Json::encode($applicationConfig) .');')
         ->prependFile($this->basePath('js/backend-scripts.js?') . $this->layout()->cacheBustIndex).PHP_EOL;
-
