@@ -17,12 +17,12 @@ $this->headMeta()->appendName('viewport','width=device-width, initial-scale=1.0'
 
 // common css
 $this->headLink()
-    ->prependStylesheet($this->basePath('/css/backend.css?'.$this->layout()->cacheBustIndex), 'all')
+    ->prependStylesheet($this->basePath('my-backend/css/main.css?'.$this->layout()->cacheBustIndex), 'all')
     ->prependStylesheet('//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic', 'all');
 
 // these are the only scripts needed in the head
 // any other script is included in at the bottom of the DOM, inside 'javascript.phtml' template
-$this->headScript()->prependFile($this->basePath('js/header-scripts.js?').$this->layout()->cacheBustIndex);
+$this->headScript()->prependFile($this->basePath('my-backend/js/header.js?').$this->layout()->cacheBustIndex);
 
 $bodyClass = ($this->error ? 'error' : $this->layout()->bodyClass);
 
@@ -64,7 +64,11 @@ $bodyClass = ($this->error ? 'error' : $this->layout()->bodyClass);
 
 </div><!-- .container-fluid -->
 
-<?= $this->render('my-backend/layout/javascript') ?>
+<?php
+echo $this->inlineScript()
+          ->prependFile($this->basePath('my-backend/js/scripts.js?') . $this->layout()->cacheBustIndex)
+     .PHP_EOL;
+?>
 
 </body>
 </html>

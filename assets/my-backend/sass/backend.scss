@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+$iconSpritePath: '../vendor/yatsatrap/img/glyphicons-halflings.png';
+$iconWhiteSpritePath: '../vendor/yatsatrap/img/glyphicons-halflings-white.png';
+
+$bgcolor: #e3ddd1 !default;
+$foreground: #333 !default;
+$overlayColor: #EDEDED !default;
+
+// boilerplate
+@import '../vendor/yatsatrap/sass/bootstrap';
+@import '../vendor/yatsatrap/sass/bootstrap-responsive';
+@import '../vendor/my-sass-boilerplate/my-sass-boilerplate';
+
+// blocks
+@import 'base';
+@import 'login';

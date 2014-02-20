@@ -5,6 +5,15 @@ MyBackend
 
 It is meant to be installed in a ZF2 app built from [MySkeleton](//github.com/stefanotorresi/MySkeleton).
 
+Installation
+---
+Installation is done via Composer and Bower
+
+```
+$ composer require stefanotorresi/my-backend
+$ cd vendor/stefanotorresi/my-backend && bower install
+```
+
 Features
 ---
 
@@ -12,10 +21,9 @@ Features
 -   [AssetManager](//github.com/RWOverdijk/AssetManager) integration
 -   Base layout glued with [ZfcTwitterBootstrap](//github.com/mwillbanks/ZfcTwitterBootstrap) and [YATSATRAP!](//github.com/stefanotorresi/yatsatrap)
 -   I18n support via [MyI18n](//github.com/stefanotorresi/MyI18n)
+-   Basic User CLI Controller
 -   You can drop in your backend components by just adding a backend navigation entry
 
 TO-DO List
 ---
 -   Write some docs
--   User CLI Controller
--   Make `bower.json` mergeable by the root app

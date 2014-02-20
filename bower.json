@@ -8,7 +8,8 @@
   "dependencies": {
     "modernizr": "2.*",
     "yepnope": "1.*",
-    "jquery": "*",
-    "yatsatrap": "~2.3.2"
+    "jquery": "~2.1",
+    "yatsatrap": "~2.3.2",
+    "my-sass-boilerplate": "~1.0.0"
   }
 }
