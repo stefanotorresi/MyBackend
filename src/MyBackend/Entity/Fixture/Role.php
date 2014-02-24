@@ -35,6 +35,6 @@ class Role extends AbstractFixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
-        return array('MyBackend\Entity\Fixture\Permission');
+        return ['MyBackend\Entity\Fixture\Permission'];
     }
 }
