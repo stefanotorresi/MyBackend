@@ -8,23 +8,15 @@
 namespace MyBackend\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use MyBase\Entity\Entity;
 use ZfcRbac\Permission\PermissionInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="mbe_permissions")
  */
-class Permission implements PermissionInterface
+class Permission extends Entity implements PermissionInterface
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
     /**
      * @var string
      *
@@ -38,16 +30,6 @@ class Permission implements PermissionInterface
     public function __construct($name)
     {
         $this->setName($name);
-    }
-
-    /**
-     * Get the permission identifier
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -1,10 +1,13 @@
 <?php
 
-namespace MyBackend;
-
 return [
     'modules' => [
-        __NAMESPACE__,
+        'DoctrineModule',
+        'DoctrineORMModule',
+        'ZfcUser',
+        'ZfcUserDoctrineORM',
+        'ZfcRbac',
+        'MyBackend',
     ],
     'module_listener_options' => [
         'config_glob_paths'    => [

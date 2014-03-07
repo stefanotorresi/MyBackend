@@ -16,7 +16,7 @@ use Zend\Console\Adapter\Posix;
 use Zend\Console\ColorInterface as Color;
 use Zend\Console\Console;
 use Zend\Console\Prompt;
-use Zend\Permissions\Rbac\Rbac;
+use Rbac\Rbac;
 
 class UserConsoleController extends AbstractConsoleController
 {

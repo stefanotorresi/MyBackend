@@ -8,13 +8,23 @@
 namespace MyBackend\Service;
 
 use MyBackend\Entity\User;
-use Zend\Permissions\Rbac\RoleInterface;
+use MyBackend\Mapper\RoleMapperInterface;
+use Rbac\Role\RoleInterface;
 use ZfcUser\Service\User as ZfcUserService;
 
 class UserService extends ZfcUserService
 {
+    /**
+     * @var RoleMapperInterface
+     */
     protected $roleMapper;
 
+    /**
+     * @param  RoleInterface|string           $role
+     * @param  User                           $user
+     * @param  bool                           $update
+     * @throws Exception\UserServiceException
+     */
     public function addRoleToUser($role, User $user, $update = true)
     {
         if ($role instanceof RoleInterface) {
@@ -48,7 +58,7 @@ class UserService extends ZfcUserService
     }
 
     /**
-     * @return mixed
+     * @return RoleMapperInterface
      */
     public function getRoleMapper()
     {

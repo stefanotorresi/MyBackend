@@ -26,8 +26,8 @@ class Login extends AbstractListenerAggregate
     }
 
     /**
-     * @param  MvcEvent                            $e
-     * @return null|\Zend\Stdlib\ResponseInterface
+     * @param  MvcEvent         $e
+     * @return HttpRequest|null
      */
     public function preDispatch(MvcEvent $e)
     {

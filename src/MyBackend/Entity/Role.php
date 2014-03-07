@@ -13,7 +13,7 @@ use Rbac\Role\RoleInterface;
 use ZfcRbac\Permission\PermissionInterface;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="MyBackend\Mapper\Doctrine\DoctrineRoleMapper")
  * @ORM\Table(name="mbe_roles")
  */
 class Role implements RoleInterface

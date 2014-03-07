@@ -33,7 +33,7 @@ class Render extends AbstractListenerAggregate
         }
 
         $layoutModel = $e->getViewModel();
-        if (! $layoutModel instanceof Model\ViewModel) {
+        if (! $layoutModel instanceof Model\ViewModel || $layoutModel instanceof Model\JsonModel) {
             return;
         }
 
