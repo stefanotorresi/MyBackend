@@ -9,6 +9,7 @@
 namespace MyBackend\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ZfcRbac\Identity\IdentityInterface;
 use ZfcUser\Entity\User as ZfcUser;
@@ -36,25 +37,16 @@ class User extends ZfcUser implements IdentityInterface
     }
 
     /**
-     * returns an array of role names, as expected by Zend Rbac
-     *
-     * @return array
+     * @return Collection
      */
     public function getRoles()
     {
-        $roleNames = [];
-
-        foreach ($this->roles as $role) {
-            /** @var Role $role  */
-            $roleNames[] = $role->getName();
-        }
-
-        return $roleNames;
+        return $this->roles;
     }
 
     /**
-     * @param Role $role
-     *                   @return $this
+     * @param  Role  $role
+     * @return $this
      */
     public function addRole(Role $role)
     {

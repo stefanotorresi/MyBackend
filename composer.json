@@ -26,7 +26,7 @@
         "mwillbanks/zfc-twitter-bootstrap": "dev-master",
         "rwoverdijk/assetmanager": "1.*",
         "stefanotorresi/my-base": "1.*",
-        "zf-commons/zfc-rbac": "1.*",
+        "zf-commons/zfc-rbac": "~2.1",
         "zf-commons/zfc-user-doctrine-orm": "0.*"
     },
     "extra": {

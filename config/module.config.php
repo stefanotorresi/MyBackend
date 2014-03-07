@@ -30,23 +30,17 @@ return [
      * ZfcRbac module
      */
     'zfc_rbac' => [
-        'protection_policy' => 'allow',
         'guards' => [
             'ZfcRbac\Guard\RouteGuard' => [
-                'admin/login'=> ['guest'],
+                'admin/login' => ['guest'],
                 'admin*' => ['admin'],
             ],
         ],
-        'role_providers' => [
+        'role_provider' => [
             'ZfcRbac\Role\ObjectRepositoryRoleProvider' => [
                 'object_manager' => 'doctrine.entitymanager.orm_default',
                 'class_name'     => 'MyBackend\Entity\Role',
-            ],
-        ],
-        'permission_providers' => [
-            'ZfcRbac\Permission\ObjectRepositoryPermissionProvider' => [
-                'object_manager' => 'doctrine.entitymanager.orm_default',
-                'class_name'     => 'MyBackend\Entity\Permission',
+                'role_name_property' => 'name',
             ],
         ],
     ],
