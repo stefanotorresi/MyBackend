@@ -37,7 +37,8 @@
     },
     "autoload": {
         "psr-0": {
-            "MyBackend": "src/"
+            "MyBackend": "src/",
+            "MyBackend\\Test\\": "tests/"
         },
         "classmap": [
             "./"
