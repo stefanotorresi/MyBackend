@@ -8,19 +8,24 @@
 
 namespace MyBackend\Entity\Fixture;
 
-use MyBackend\Entity;
+use MyBackend\Entity\Permission;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
-class Permission extends AbstractFixture
+class PermissionFixture extends AbstractFixture
 {
     public function load(ObjectManager $manager)
     {
-        $adminPermission = new Entity\Permission('admin');
+        $permissions = [
+            new Permission('admin-login'),
+            new Permission('admin-dashboard-permission'),
+        ];
 
-        $this->addReference('admin-permission', $adminPermission);
+        foreach ($permissions as $permission) {
+            $this->addReference($permission->getName().'-permission', $permission);
+            $manager->persist($permission);
+        }
 
-        $manager->persist($adminPermission);
         $manager->flush();
     }
 }

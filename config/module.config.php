@@ -32,8 +32,8 @@ return [
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RouteGuard' => [
-                'admin/login' => ['guest'],
-                'admin*' => ['admin'],
+                'admin/login' => ['admin-login'],
+                'admin*' => ['admin-dashboard'],
             ],
         ],
         'role_provider' => [
