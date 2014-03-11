@@ -15,14 +15,17 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class RoleFixture extends AbstractFixture implements DependentFixtureInterface
 {
+    const ADMIN = 'admin';
+    const GUEST = 'guest';
+
     public function load(ObjectManager $manager)
     {
-        $adminLoginPermission = $this->getReference('admin-login-permission');
-        $adminDashboardPermission = $this->getReference('admin-dashboard-permission');
+        $canLoginAsAdmin      = $this->getReference(PermissionFixture::CAN_LOGIN_AS_ADMIN . '-permission');
+        $canUseAdminDashboard = $this->getReference(PermissionFixture::CAN_USE_ADMIN_DASHBOARD . '-permission');
 
         $roles = [
-            (new Entity\Role('admin'))->addPermission($adminDashboardPermission),
-            (new Entity\Role('guest'))->addPermission($adminLoginPermission)
+            (new Entity\Role(static::ADMIN))->addPermission($canUseAdminDashboard),
+            (new Entity\Role(static::GUEST))->addPermission($canLoginAsAdmin)
         ];
 
         foreach ($roles as $role) {

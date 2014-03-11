@@ -2,6 +2,8 @@
 
 namespace MyBackend;
 
+use MyBackend\Entity\Fixture\RoleFixture;
+
 return [
 
     /**
@@ -32,8 +34,8 @@ return [
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RouteGuard' => [
-                'admin/login' => ['guest'],
-                'admin*' => ['admin'],
+                'admin/login' => [ RoleFixture::GUEST ],
+                'admin*' => [ RoleFixture::ADMIN ],
             ],
         ],
         'role_provider' => [
