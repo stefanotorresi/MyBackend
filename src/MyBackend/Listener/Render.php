@@ -13,6 +13,7 @@ use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model;
+use ZfcRbac\Exception\UnauthorizedException;
 
 class Render extends AbstractListenerAggregate
 {
@@ -32,8 +33,14 @@ class Render extends AbstractListenerAggregate
             return;
         }
 
+        if ($e->isError() && $e->getParam('exception') instanceof UnauthorizedException) {
+            $e->setParam('module', null);
+
+            return;
+        }
+
         $layoutModel = $e->getViewModel();
-        if (! $layoutModel instanceof Model\ViewModel) {
+        if (! $layoutModel instanceof Model\ViewModel || $layoutModel instanceof Model\JsonModel) {
             return;
         }
 
@@ -47,8 +54,6 @@ class Render extends AbstractListenerAggregate
             'cacheBustIndex'    => $options->getCacheBustIndex(),
             'backendRoute'      => $options->getBackendRoute(),
             'frontendRoute'     => $options->getFrontendRoute(),
-            'backendLoginRoute' => $options->getBackendLoginRoute(),
-            'postLogoutRoute'   => $options->getPostLogoutRoute(),
             'error'             => $e->isError(),
             'i18nEnabled'       => (bool) $serviceManager->get('ModuleManager')->getModule('MyI18n'),
         ]);

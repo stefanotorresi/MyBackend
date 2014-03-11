@@ -9,6 +9,7 @@
 namespace MyBackend\Controller;
 
 use MyBackend\Options\ModuleOptions;
+use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
@@ -47,6 +48,15 @@ class AdminController extends AbstractActionController
             },
             1000
         );
+
+        return $this->forward()->dispatch('zfcuser');
+    }
+
+    public function logoutAction()
+    {
+        /** @var Request $request */
+        $request = $this->getRequest();
+        $request->getQuery()->set('redirect', $this->url()->fromRoute($this->getModuleOptions()->getPostLogoutRoute()));
 
         return $this->forward()->dispatch('zfcuser');
     }

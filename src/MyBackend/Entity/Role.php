@@ -9,14 +9,14 @@ namespace MyBackend\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Permissions\Rbac\AbstractRole;
+use Rbac\Role\RoleInterface;
 use ZfcRbac\Permission\PermissionInterface;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="MyBackend\Mapper\Doctrine\DoctrineRoleMapper")
  * @ORM\Table(name="mbe_roles")
  */
-class Role extends AbstractRole
+class Role implements RoleInterface
 {
     /**
      * @var int|null
@@ -35,16 +35,9 @@ class Role extends AbstractRole
     protected $name;
 
     /**
-     * @var Role
-     *
-     * @ORM\ManyToOne(targetEntity="Role")
-     */
-    protected $parent;
-
-    /**
      * @var PermissionInterface[]|Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", inversedBy="roles", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinTable(name="mbe_roles_permissions")
      */
     protected $permissions;
@@ -72,11 +65,13 @@ class Role extends AbstractRole
      * Set the role name
      *
      * @param  string $name
-     * @return void
+     * @return self
      */
     public function setName($name)
     {
         $this->name = (string) $name;
+
+        return $this;
     }
 
     /**
@@ -90,31 +85,10 @@ class Role extends AbstractRole
     }
 
     /**
-     * Set the parent role
-     *
-     * @param  string|Role $parent
-     * @return void
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
-     * Get the parent role
-     *
-     * @return Role
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
      * Add a permission
      *
      * @param  PermissionInterface|string $permission
-     * @return void
+     * @return self
      */
     public function addPermission($permission)
     {
@@ -122,7 +96,16 @@ class Role extends AbstractRole
             $permission = new Permission($permission);
         }
 
-        $permission->addRole($this);
-        $this->permissions[$permission->getName()] = $permission;
+        $this->permissions[(string) $permission] = $permission;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasPermission($permission)
+    {
+        return isset($this->permissions[(string) $permission]);
     }
 }

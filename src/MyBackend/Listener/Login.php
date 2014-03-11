@@ -26,21 +26,21 @@ class Login extends AbstractListenerAggregate
     }
 
     /**
-     * @param  MvcEvent                            $e
-     * @return null|\Zend\Stdlib\ResponseInterface
+     * @param  MvcEvent         $e
+     * @return HttpRequest|null
      */
     public function preDispatch(MvcEvent $e)
     {
+        $request = $e->getRequest();
+
+        if (! $request instanceof HttpRequest) {
+            return;
+        }
+
         $router     = $e->getRouter();
         $routeName  = $e->getRouteMatch()->getMatchedRouteName();
 
         if ($routeName !== UserController::ROUTE_LOGIN) {
-            return;
-        }
-
-        $request = $e->getRequest();
-
-        if (! $request instanceof HttpRequest) {
             return;
         }
 

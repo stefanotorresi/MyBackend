@@ -5,7 +5,7 @@
  * ************************************************
  */
 
-namespace MyBackend\Mapper;
+namespace MyBackend\Mapper\Doctrine;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;

@@ -9,6 +9,7 @@
 namespace MyBackend\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ZfcRbac\Identity\IdentityInterface;
 use ZfcUser\Entity\User as ZfcUser;
@@ -16,6 +17,16 @@ use ZfcUser\Entity\User as ZfcUser;
 /**
  * @ORM\Entity
  * @ORM\Table(name="mbe_users")
+ * @ORM\AttributeOverrides({
+ *      @ORM\AttributeOverride(name="password",
+ *          column=@ORM\Column(
+ *              name     = "password",
+ *              type     = "string",
+ *              length   = 128,
+ *              nullable = true
+ *          )
+ *      )
+ * })
  */
 class User extends ZfcUser implements IdentityInterface
 {
@@ -30,31 +41,49 @@ class User extends ZfcUser implements IdentityInterface
      */
     protected $roles;
 
-    public function __construct()
+    /**
+     * @param string $username
+     * @param string $email
+     * @param string $displayName
+     * @param string $password
+     * @param int    $state
+     */
+    public function __construct($username = null, $email = null, $displayName = null, $password = null, $state = null)
     {
+        if ($username) {
+            $this->setUsername($username);
+        }
+
+        if ($email) {
+            $this->setEmail($email);
+        }
+
+        if ($displayName) {
+            $this->setDisplayName($displayName);
+        }
+
+        if ($password) {
+            $this->setPassword($password);
+        }
+
+        if ($state) {
+            $this->setState($state);
+        }
+
         $this->roles = new ArrayCollection();
     }
 
     /**
-     * returns an array of role names, as expected by Zend Rbac
-     *
-     * @return array
+     * @return Collection
      */
     public function getRoles()
     {
-        $roleNames = [];
-
-        foreach ($this->roles as $role) {
-            /** @var Role $role  */
-            $roleNames[] = $role->getName();
-        }
-
-        return $roleNames;
+        return $this->roles;
     }
 
     /**
-     * @param Role $role
-     *                   @return $this
+     * @param  Role $role
+     * @return self
      */
     public function addRole(Role $role)
     {

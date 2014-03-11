@@ -2,6 +2,8 @@
 
 namespace MyBackend;
 
+use MyBackend\Entity\Fixture\RoleFixture;
+
 return [
 
     /**
@@ -30,23 +32,17 @@ return [
      * ZfcRbac module
      */
     'zfc_rbac' => [
-        'protection_policy' => 'allow',
         'guards' => [
             'ZfcRbac\Guard\RouteGuard' => [
-                'admin/login'=> ['guest'],
-                'admin*' => ['admin'],
+                'admin/login' => [ RoleFixture::GUEST ],
+                'admin*' => [ RoleFixture::ADMIN ],
             ],
         ],
-        'role_providers' => [
+        'role_provider' => [
             'ZfcRbac\Role\ObjectRepositoryRoleProvider' => [
                 'object_manager' => 'doctrine.entitymanager.orm_default',
                 'class_name'     => 'MyBackend\Entity\Role',
-            ],
-        ],
-        'permission_providers' => [
-            'ZfcRbac\Permission\ObjectRepositoryPermissionProvider' => [
-                'object_manager' => 'doctrine.entitymanager.orm_default',
-                'class_name'     => 'MyBackend\Entity\Permission',
+                'role_name_property' => 'name',
             ],
         ],
     ],
@@ -108,6 +104,15 @@ return [
                                 'action' => 'login'
                             ],
                         ],
+                    ],
+                    'logout' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/logout',
+                            'defaults' => [
+                                'action' => 'logout'
+                            ],
+                        ],
                     ]
                 ],
             ],
@@ -152,17 +157,16 @@ return [
         'factories' => [
             'MyBackend\Options\ModuleOptions'           => 'MyBackend\Options\ModuleOptionsFactory',
             'zfcuser_user_mapper'                       => 'MyBackend\Mapper\UserMapperFactory',
-            'MyBackend\Mapper\RoleMapper'               => 'MyBackend\Mapper\DoctrineRoleMapperFactory',
+            'MyBackend\Mapper\RoleMapper'               => 'MyBackend\Mapper\Doctrine\DoctrineRoleMapperFactory',
             'MyBackend\Navigation\BackendNavigation'    => 'MyBackend\Navigation\BackendNavigationFactory',
             'MyBackend\Navigation\BackendBreadcrumbs'   => 'MyBackend\Navigation\BackendBreadcrumbsFactory',
         ],
         'aliases' => [
+            'MyBackend\Service\UserService'             => 'zfcuser_user_service',
             'MyBackend\Mapper\UserMapper'               => 'zfcuser_user_mapper',
 
             // this is needed by ZfcRbac
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
-            // these are needed by ZfcUser
-            'zfcuser_zend_db_adapter'                   => 'Zend\Db\Adapter\Adapter',
         ],
     ],
 

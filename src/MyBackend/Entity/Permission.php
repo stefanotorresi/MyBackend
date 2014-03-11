@@ -7,38 +7,22 @@
 
 namespace MyBackend\Entity;
 
-use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use MyBase\Entity\Entity;
 use ZfcRbac\Permission\PermissionInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="mbe_permissions")
  */
-class Permission implements PermissionInterface
+class Permission extends Entity implements PermissionInterface
 {
     /**
-     * @var int|null
+     * @var string
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=32, unique=true)
+     * @ORM\Column(type="string", length=128, unique=true)
      */
     protected $name;
-
-    /**
-     * @var Role[]|Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Role", mappedBy="permissions")
-     */
-    protected $roles;
 
     /**
      * Constructor
@@ -46,28 +30,19 @@ class Permission implements PermissionInterface
     public function __construct($name)
     {
         $this->setName($name);
-        $this->roles = new Collections\ArrayCollection();
-    }
-
-    /**
-     * Get the permission identifier
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
      * Set the permission name
      *
      * @param  string $name
-     * @return void
+     * @return self
      */
     public function setName($name)
     {
         $this->name = (string) $name;
+
+        return $this;
     }
 
     /**
@@ -81,20 +56,10 @@ class Permission implements PermissionInterface
     }
 
     /**
-     * @param Role $role
+     * {@inheritDoc}
      */
-    public function addRole(Role $role)
+    public function __toString()
     {
-        $this->roles->add($role);
-    }
-
-    /**
-     * Get the roles
-     *
-     * @return Role[]
-     */
-    public function getRoles()
-    {
-        return $this->roles;
+        return $this->name;
     }
 }
