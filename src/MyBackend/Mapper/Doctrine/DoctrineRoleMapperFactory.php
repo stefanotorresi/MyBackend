@@ -7,6 +7,7 @@
 
 namespace MyBackend\Mapper\Doctrine;
 
+use MyBackend\Entity\Role;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -20,6 +21,6 @@ class DoctrineRoleMapperFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $serviceLocator->get('Doctrine\ORM\EntityManager')->getRepository('MyBackend\Entity\Role');
+        return $serviceLocator->get('Doctrine\ORM\EntityManager')->getRepository(Role::fqcn());
     }
 }
