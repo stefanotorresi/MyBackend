@@ -13,6 +13,7 @@ use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model;
+use ZfcRbac\Exception\UnauthorizedException;
 
 class Render extends AbstractListenerAggregate
 {
@@ -29,6 +30,11 @@ class Render extends AbstractListenerAggregate
     {
         $module = $e->getParam('module');
         if (! $module instanceof MyBackend) {
+            return;
+        }
+
+        if ($e->isError() && $e->getParam('exception') instanceof UnauthorizedException) {
+            $e->setParam('module', null);
             return;
         }
 
