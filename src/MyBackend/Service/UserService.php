@@ -9,9 +9,15 @@ namespace MyBackend\Service;
 
 use MyBackend\Entity\User;
 use MyBackend\Mapper\RoleMapperInterface;
+use MyBackend\Mapper\UserMapperInterface;
 use Rbac\Role\RoleInterface;
 use ZfcUser\Service\User as ZfcUserService;
 
+/**
+ * Class UserService
+ * @package MyBackend\Service
+ * @method UserMapperInterface getUserMapper()
+ */
 class UserService extends ZfcUserService
 {
     /**

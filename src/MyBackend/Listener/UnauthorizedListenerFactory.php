@@ -7,7 +7,22 @@
 
 namespace MyBackend\Listener;
 
-class UnauthorizedListenerFactory
-{
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
+class UnauthorizedListenerFactory implements FactoryInterface
+{
+    /**
+     * Create service
+     *
+     * @param  ServiceLocatorInterface $serviceLocator
+     * @return UnauthorizedListener
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return new UnauthorizedListener(
+            $serviceLocator->get('MyBackend\Options\ModuleOptions'),
+            $serviceLocator->get('ZfcRbac\Service\AuthorizationService')
+        );
+    }
 }

@@ -9,6 +9,7 @@ namespace MyBackend\Navigation;
 
 use MyBackend\Options\ModuleOptions;
 use Zend\Mvc\Application;
+use Zend\Mvc\Router\RouteMatch;
 use Zend\Navigation\Navigation;
 use Zend\Navigation\Page\Mvc as MvcPage;
 use Zend\ServiceManager\FactoryInterface;
@@ -39,11 +40,11 @@ class BackendBreadcrumbsFactory implements FactoryInterface
             'label'         => 'Backend',
             'route'         => $options->getBackendRoute(),
             'router'        => $router,
-            'routeMatch'    => $routeMatch
+            'routeMatch'    => $routeMatch ?: new RouteMatch([])
         ]);
 
         foreach ($navBackend->getPages() as $page) {
-            $home->addPage($page->toArray());
+            $home->addPage($page);
         }
 
         $pages = [$home];

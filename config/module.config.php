@@ -19,7 +19,7 @@ return [
 //        'backend_login_route'       => 'admin/login',
 //        'post_logout_route'         => 'admin',
 //        'template'                  => 'my-backend/layout/layout',
-//        'cache_bust_index'          => uniqid(),
+//        'cache_bust_index'          => mt_rand(),
 //        'title'                     => 'My Backend',
     ],
 
@@ -90,7 +90,7 @@ return [
                 'options' => [
                     'route' => '/admin',
                     'defaults' => [
-                        'controller' => 'admin',
+                        'controller' => 'MyBackend\Controller\AdminController',
                         'action' => 'index'
                     ],
                 ],
@@ -126,7 +126,7 @@ return [
                     'options' => [
                         'route' => 'user create [--username=] [--email=] [--roles=]',
                         'defaults' => [
-                            'controller' => __NAMESPACE__ . '\Controller\UserConsoleController',
+                            'controller' => 'MyBackend\Controller\UserConsoleController',
                             'action' => 'create',
                         ],
                     ],
@@ -135,7 +135,7 @@ return [
                     'options' => [
                         'route' => 'user delete [--username=] [--email=]',
                         'defaults' => [
-                            'controller' => __NAMESPACE__ . '\Controller\UserConsoleController',
+                            'controller' => 'MyBackend\Controller\UserConsoleController',
                             'action' => 'delete',
                         ],
                     ],
@@ -152,14 +152,15 @@ return [
 
     'service_manager' => [
         'invokables' => [
-            'zfcuser_user_service'              => 'MyBackend\Service\UserService',
+            'zfcuser_user_service'                      => 'MyBackend\Service\UserService',
         ],
         'factories' => [
             'MyBackend\Options\ModuleOptions'           => 'MyBackend\Options\ModuleOptionsFactory',
-            'zfcuser_user_mapper'                       => 'MyBackend\Mapper\UserMapperFactory',
+            'zfcuser_user_mapper'                       => 'MyBackend\Mapper\Doctrine\DoctrineUserMapperFactory',
             'MyBackend\Mapper\RoleMapper'               => 'MyBackend\Mapper\Doctrine\DoctrineRoleMapperFactory',
             'MyBackend\Navigation\BackendNavigation'    => 'MyBackend\Navigation\BackendNavigationFactory',
             'MyBackend\Navigation\BackendBreadcrumbs'   => 'MyBackend\Navigation\BackendBreadcrumbsFactory',
+            'MyBackend\Listener\UnauthorizedListener'   => 'MyBackend\Listener\UnauthorizedListenerFactory'
         ],
         'aliases' => [
             'MyBackend\Service\UserService'             => 'zfcuser_user_service',
@@ -172,7 +173,7 @@ return [
 
     'controllers' => [
         'invokables' => [
-            'admin' => 'MyBackend\Controller\AdminController',
+            'MyBackend\Controller\AdminController' => 'MyBackend\Controller\AdminController',
             'MyBackend\Controller\UserConsoleController' => 'MyBackend\Controller\UserConsoleController',
         ],
     ],

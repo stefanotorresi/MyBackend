@@ -15,7 +15,7 @@ use ZfcRbac\Identity\IdentityInterface;
 use ZfcUser\Entity\User as ZfcUser;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="MyBackend\Mapper\Doctrine\DoctrineUserMapper")
  * @ORM\Table(name="mbe_users")
  * @ORM\AttributeOverrides({
  *      @ORM\AttributeOverride(name="password",

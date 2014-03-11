@@ -174,7 +174,7 @@ class ModuleOptions extends AbstractOptions
     public function getCacheBustIndex()
     {
         if (! $this->cacheBustIndex) {
-            $this->cacheBustIndex = uniqid();
+            $this->cacheBustIndex = mt_rand();
         }
 
         return $this->cacheBustIndex;

@@ -9,6 +9,7 @@ namespace MyBackend\Entity;
 
 use Doctrine\Common\Collections;
 use Doctrine\ORM\Mapping as ORM;
+use MyBase\Entity\Entity;
 use Rbac\Role\RoleInterface;
 use ZfcRbac\Permission\PermissionInterface;
 
@@ -16,17 +17,8 @@ use ZfcRbac\Permission\PermissionInterface;
  * @ORM\Entity(repositoryClass="MyBackend\Mapper\Doctrine\DoctrineRoleMapper")
  * @ORM\Table(name="mbe_roles")
  */
-class Role implements RoleInterface
+class Role extends Entity implements RoleInterface
 {
-    /**
-     * @var int|null
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
     /**
      * @var string|null
      *
@@ -49,16 +41,6 @@ class Role implements RoleInterface
     {
         $this->setName($name);
         $this->permissions = new Collections\ArrayCollection();
-    }
-
-    /**
-     * Get the role identifier
-     *
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
