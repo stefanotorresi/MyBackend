@@ -18,7 +18,7 @@ class PermissionFixture extends AbstractFixture
     {
         $permissions = [
             new Permission('admin-login'),
-            new Permission('admin-dashboard-permission'),
+            new Permission('admin-dashboard'),
         ];
 
         foreach ($permissions as $permission) {

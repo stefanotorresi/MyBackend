@@ -35,6 +35,7 @@ class Render extends AbstractListenerAggregate
 
         if ($e->isError() && $e->getParam('exception') instanceof UnauthorizedException) {
             $e->setParam('module', null);
+
             return;
         }
 
@@ -53,8 +54,6 @@ class Render extends AbstractListenerAggregate
             'cacheBustIndex'    => $options->getCacheBustIndex(),
             'backendRoute'      => $options->getBackendRoute(),
             'frontendRoute'     => $options->getFrontendRoute(),
-            'backendLoginRoute' => $options->getBackendLoginRoute(),
-            'postLogoutRoute'   => $options->getPostLogoutRoute(),
             'error'             => $e->isError(),
             'i18nEnabled'       => (bool) $serviceManager->get('ModuleManager')->getModule('MyI18n'),
         ]);

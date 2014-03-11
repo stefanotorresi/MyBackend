@@ -13,7 +13,7 @@ use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
-use ZfcRbac\Exception\UnauthorizedExceptionInterface;
+use ZfcRbac\Guard\AbstractGuard;
 use ZfcRbac\Service\AuthorizationService;
 
 class Unauthorized extends AbstractListenerAggregate
@@ -35,9 +35,9 @@ class Unauthorized extends AbstractListenerAggregate
         }
 
         // Do nothing if no error or if response is not HTTP response
-        if (!($exception = $event->getParam('exception') instanceof UnauthorizedExceptionInterface)
-            || ($result = $event->getResult() instanceof HttpResponse)
-            || !($response = $event->getResponse() instanceof HttpResponse)
+        if (!($error = $event->getError()) === AbstractGuard::GUARD_UNAUTHORIZED
+            || ($result = $event->getResult()) instanceof HttpResponse
+            || !($response = $event->getResponse()) instanceof HttpResponse
         ) {
             return;
         }
@@ -52,12 +52,12 @@ class Unauthorized extends AbstractListenerAggregate
         $options = $serviceManager->get('MyBackend\Options\ModuleOptions');
 
         $adminDashboardGrant = $authorizationService->isGranted('admin-dashboard');
-        $adminLoginGrant = $authorizationService->isGranted('admin-login');
+        $adminLoginGrant     = $authorizationService->isGranted('admin-login');
         $backendLoginRoute   = $options->getBackendLoginRoute();
         $backendRoute        = $options->getBackendRoute();
 
         // unauthorized admin login request, bail out and let zfcrbac handle it
-        if ($routeName === $backendLoginRoute && ! $adminLoginGrant) {
+        if ($routeName === $backendLoginRoute && $adminLoginGrant) {
             return;
         }
 
@@ -71,6 +71,7 @@ class Unauthorized extends AbstractListenerAggregate
             $url = $router->assemble([], ['name' => $backendLoginRoute]);
         }
 
+        $event->stopPropagation(true);
         $response = $event->getResponse();
         $response->getHeaders()->addHeaderLine('Location', $url);
         $response->setStatusCode(302);

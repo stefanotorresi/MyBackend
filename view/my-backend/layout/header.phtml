@@ -8,7 +8,7 @@
 
 $this->placeHolder('title')->set('<h2 class="title">'.$this->escapeHtml($this->layout()->title).'</h2>');
 
-if ($this->isGranted('admin')) {
+if ($this->isGranted('admin-dashboard')) {
     $this->placeHolder('title')->setPrefix('<div class="span6">')->setPostfix('</div>');
 }
 
@@ -33,7 +33,7 @@ $this->placeHolder('nav-lang')->captureEnd();
 
         <?= $this->placeHolder('title') ?>
 
-        <?php if ($this->isGranted('admin')) : ?>
+        <?php if ($this->isGranted('admin-dashboard')) : ?>
 
         <nav id="nav-secondary" class="span6">
             <?= $this->placeHolder('nav-lang') ?>
@@ -49,7 +49,7 @@ $this->placeHolder('nav-lang')->captureEnd();
                     <span> Backend</span>
                 </a>
                 <a class="btn btn-danger btn-small btn-icon-text"
-                   href="<?= $this->url('zfcuser/logout', [], [ 'query' => [ 'redirect' => $this->url($this->layout()->postLogoutRoute) ] ] ); ?>">
+                   href="<?= $this->url('admin/logout'); ?>">
                     <i class="icon-off icon-white"></i>
                     <span> Logout</span>
                 </a>
@@ -64,7 +64,7 @@ $this->placeHolder('nav-lang')->captureEnd();
 
     </div>
 
-    <?php if ($this->isGranted('admin')) : ?>
+    <?php if ($this->isGranted('admin-dashboard')) : ?>
 
 
     <nav id="nav-backend" class="navbar">

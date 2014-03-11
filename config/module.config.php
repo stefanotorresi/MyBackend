@@ -32,8 +32,8 @@ return [
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RouteGuard' => [
-                'admin/login' => ['admin-login'],
-                'admin*' => ['admin-dashboard'],
+                'admin/login' => ['guest'],
+                'admin*' => ['admin'],
             ],
         ],
         'role_provider' => [
@@ -100,6 +100,15 @@ return [
                             'route' => '/login',
                             'defaults' => [
                                 'action' => 'login'
+                            ],
+                        ],
+                    ],
+                    'logout' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/logout',
+                            'defaults' => [
+                                'action' => 'logout'
                             ],
                         ],
                     ]

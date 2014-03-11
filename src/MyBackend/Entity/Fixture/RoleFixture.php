@@ -25,8 +25,10 @@ class RoleFixture extends AbstractFixture implements DependentFixtureInterface
             (new Entity\Role('guest'))->addPermission($adminLoginPermission)
         ];
 
-        foreach ($roles as $key => $role) {
-            $this->addReference($key.'-role', $role);
+        foreach ($roles as $role) {
+            if (! $this->hasReference($role->getName().'-role')) {
+                $this->addReference($role->getName().'-role', $role);
+            }
             $manager->persist($role);
         }
 
