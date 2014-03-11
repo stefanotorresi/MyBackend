@@ -65,11 +65,13 @@ class Role implements RoleInterface
      * Set the role name
      *
      * @param  string $name
-     * @return void
+     * @return self
      */
     public function setName($name)
     {
         $this->name = (string) $name;
+
+        return $this;
     }
 
     /**
@@ -86,7 +88,7 @@ class Role implements RoleInterface
      * Add a permission
      *
      * @param  PermissionInterface|string $permission
-     * @return void
+     * @return self
      */
     public function addPermission($permission)
     {
@@ -95,6 +97,8 @@ class Role implements RoleInterface
         }
 
         $this->permissions[(string) $permission] = $permission;
+
+        return $this;
     }
 
     /**

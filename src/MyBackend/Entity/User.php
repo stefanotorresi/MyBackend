@@ -83,7 +83,7 @@ class User extends ZfcUser implements IdentityInterface
 
     /**
      * @param  Role  $role
-     * @return $this
+     * @return self
      */
     public function addRole(Role $role)
     {

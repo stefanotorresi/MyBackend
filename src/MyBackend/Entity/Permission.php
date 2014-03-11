@@ -36,11 +36,13 @@ class Permission extends Entity implements PermissionInterface
      * Set the permission name
      *
      * @param  string $name
-     * @return void
+     * @return self
      */
     public function setName($name)
     {
         $this->name = (string) $name;
+
+        return $this;
     }
 
     /**
