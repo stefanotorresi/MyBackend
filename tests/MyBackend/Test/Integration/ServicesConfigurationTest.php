@@ -7,6 +7,7 @@
 
 namespace MyBackend\Test\Integration;
 
+use MyBackend\Options\ModuleOptionsAwareInterface;
 use MyBackend\Test\Bootstrap;
 use PHPUnit_Framework_TestCase as TestCase;
 
@@ -28,7 +29,13 @@ class ServicesConfigurationTest extends TestCase
         $serviceManager->get('Application')->bootstrap();
 
         $this->assertTrue($serviceLocator->has($name));
-        $this->assertInstanceOf($class, $serviceLocator->get($name));
+        $service = $serviceLocator->get($name);
+        $this->assertInstanceOf($class, $service);
+
+        // ensure that MyBackend\Options\ModuleOptionsAwareInitializer is registered
+        if ($service instanceof ModuleOptionsAwareInterface) {
+            $this->assertSame($serviceManager->get('MyBackend\Options\ModuleOptions'), $service->getModuleOptions());
+        }
     }
 
     public function servicesProvider()
@@ -43,6 +50,7 @@ class ServicesConfigurationTest extends TestCase
             ['ServiceManager', 'MyBackend\Navigation\BackendBreadcrumbs', 'Zend\Navigation\Navigation'],
             ['ServiceManager', 'MyBackend\Listener\UnauthorizedListener', 'MyBackend\Listener\UnauthorizedListener'],
             ['ServiceManager', 'Zend\Authentication\AuthenticationService', 'Zend\Authentication\AuthenticationService'],
+            ['ServiceManager', 'MyBackend\Options\ModuleOptions', 'MyBackend\Options\ModuleOptions'],
             ['ControllerLoader', 'MyBackend\Controller\AdminController', 'MyBackend\Controller\AdminController'],
             ['ControllerLoader', 'MyBackend\Controller\UserConsoleController', 'MyBackend\Controller\UserConsoleController'],
         ];

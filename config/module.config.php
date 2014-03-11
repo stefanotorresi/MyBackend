@@ -153,6 +153,9 @@ return [
     'service_manager' => [
         'invokables' => [
             'zfcuser_user_service'                      => 'MyBackend\Service\UserService',
+            'MyBackend\Listener\LoginListener'          => 'MyBackend\Listener\LoginListener',
+            'MyBackend\Listener\RenderListener'         => 'MyBackend\Listener\RenderListener',
+            'MyBackend\Listener\RouteListener'          => 'MyBackend\Listener\RouteListener',
         ],
         'factories' => [
             'MyBackend\Options\ModuleOptions'           => 'MyBackend\Options\ModuleOptionsFactory',
@@ -168,6 +171,9 @@ return [
 
             // this is needed by ZfcRbac
             'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
+        ],
+        'initializers' => [
+            '\MyBackend\Options\ModuleOptionsAwareInitializer',
         ],
     ],
 

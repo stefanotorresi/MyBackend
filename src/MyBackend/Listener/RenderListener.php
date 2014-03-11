@@ -7,16 +7,29 @@
 
 namespace MyBackend\Listener;
 
+use LazyProperty\LazyPropertiesTrait;
 use MyBackend\Module as MyBackend;
-use MyBackend\Options\ModuleOptions;
+use MyBackend\Options\ModuleOptionsAwareInterface;
+use MyBackend\Options\ModuleOptionsAwareTrait;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model;
 use ZfcRbac\Exception\UnauthorizedException;
 
-class Render extends AbstractListenerAggregate
+class RenderListener extends AbstractListenerAggregate implements ModuleOptionsAwareInterface
 {
+    use LazyPropertiesTrait;
+    use ModuleOptionsAwareTrait;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->initLazyProperties(['moduleOptions']);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -26,6 +39,9 @@ class Render extends AbstractListenerAggregate
         $this->listeners[] = $events->attach(MvcEvent::EVENT_RENDER_ERROR, [$this, 'prepareLayout'], -101);
     }
 
+    /**
+     * @param MvcEvent $e
+     */
     public function prepareLayout(MvcEvent $e)
     {
         $module = $e->getParam('module');
@@ -46,20 +62,17 @@ class Render extends AbstractListenerAggregate
 
         $serviceManager = $e->getApplication()->getServiceManager();
 
-        /** @var ModuleOptions $options  */
-        $options    = $serviceManager->get('MyBackend\Options\ModuleOptions');
-
         $layoutModel->setVariables([
-            'title'             => $options->getTitle(),
-            'cacheBustIndex'    => $options->getCacheBustIndex(),
-            'backendRoute'      => $options->getBackendRoute(),
-            'frontendRoute'     => $options->getFrontendRoute(),
+            'title'             => $this->moduleOptions->getTitle(),
+            'cacheBustIndex'    => $this->moduleOptions->getCacheBustIndex(),
+            'backendRoute'      => $this->moduleOptions->getBackendRoute(),
+            'frontendRoute'     => $this->moduleOptions->getFrontendRoute(),
             'error'             => $e->isError(),
             'i18nEnabled'       => (bool) $serviceManager->get('ModuleManager')->getModule('MyI18n'),
         ]);
-        $layoutModel->setTemplate($options->getTemplate());
+        $layoutModel->setTemplate($this->moduleOptions->getTemplate());
 
-        $translatorDomain = $options->getTranslatorTextDomain();
+        $translatorDomain = $this->moduleOptions->getTranslatorTextDomain();
 
         $viewHelperManager = $serviceManager->get('ViewHelperManager');
         $viewHelperManager->get('translate')->setTranslatorTextDomain($translatorDomain);

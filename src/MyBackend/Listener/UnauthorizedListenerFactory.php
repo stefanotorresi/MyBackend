@@ -20,9 +20,6 @@ class UnauthorizedListenerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new UnauthorizedListener(
-            $serviceLocator->get('MyBackend\Options\ModuleOptions'),
-            $serviceLocator->get('ZfcRbac\Service\AuthorizationService')
-        );
+        return new UnauthorizedListener($serviceLocator->get('ZfcRbac\Service\AuthorizationService'));
     }
 }

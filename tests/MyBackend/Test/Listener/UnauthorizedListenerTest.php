@@ -43,7 +43,8 @@ class UnauthorizedListenerTest extends TestCase
         $moduleOptions = new ModuleOptions();
         $authorizationService = $this->getMock('ZfcRbac\Service\AuthorizationService', [], [], '', false);
 
-        $listener = new UnauthorizedListener($moduleOptions, $authorizationService);
+        $listener = new UnauthorizedListener($authorizationService);
+        $listener->setModuleOptions($moduleOptions);
 
         $this->listener             = $listener;
         $this->moduleOptions        = $moduleOptions;
