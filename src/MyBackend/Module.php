@@ -23,7 +23,7 @@ class Module extends AbstractModule implements
         $eventManager->attach(new Listener\Login());
         $eventManager->attach(new Listener\Route());
         $eventManager->attach(new Listener\Render());
-        $eventManager->attach(new Listener\Error());
+        $eventManager->attach(new Listener\Unauthorized());
     }
 
     /**

@@ -16,7 +16,7 @@ use Zend\Mvc\MvcEvent;
 use ZfcRbac\Exception\UnauthorizedExceptionInterface;
 use ZfcRbac\Service\AuthorizationService;
 
-class Error extends AbstractListenerAggregate
+class Unauthorized extends AbstractListenerAggregate
 {
     /**
      * {@inheritdoc}
@@ -47,23 +47,28 @@ class Error extends AbstractListenerAggregate
 
         /** @var AuthorizationService $authorizationService */
         $authorizationService = $serviceManager->get('ZfcRbac\Service\AuthorizationService');
-        $adminGranted = $authorizationService->isGranted('admin');
 
         /** @var ModuleOptions $options  */
         $options = $serviceManager->get('MyBackend\Options\ModuleOptions');
-        $loginRoute = $options->getBackendLoginRoute();
-        $backendRoute = $options->getBackendRoute();
 
-        if ($routeName === $loginRoute && ! $adminGranted) {
+        $adminDashboardGrant = $authorizationService->isGranted('admin-dashboard');
+        $adminLoginGrant = $authorizationService->isGranted('admin-login');
+        $backendLoginRoute   = $options->getBackendLoginRoute();
+        $backendRoute        = $options->getBackendRoute();
+
+        // unauthorized admin login request, bail out and let zfcrbac handle it
+        if ($routeName === $backendLoginRoute && ! $adminLoginGrant) {
             return;
         }
 
         $router = $event->getRouter();
 
-        if ($routeName === $loginRoute && $adminGranted) {
+        if ($routeName === $backendLoginRoute && $adminDashboardGrant) {
+            // redirect admin login page to dashboard if admin is already logged in
             $url = $router->assemble([], ['name' => $backendRoute]);
         } else {
-            $url = $router->assemble([], ['name' => $loginRoute]);
+            // redirect to admin login page
+            $url = $router->assemble([], ['name' => $backendLoginRoute]);
         }
 
         $response = $event->getResponse();
