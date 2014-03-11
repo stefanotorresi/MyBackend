@@ -13,7 +13,7 @@ use Zend\EventManager\EventManager;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\CallbackHandler;
 
-class RenderTest extends PHPUnit_Framework_TestCase
+class RenderListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var EventManager
