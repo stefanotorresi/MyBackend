@@ -13,17 +13,18 @@ use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature;
 
 class Module extends AbstractModule implements
-    Feature\ConsoleUsageProviderInterface,
-    Feature\ServiceProviderInterface
+    Feature\ConsoleUsageProviderInterface
 {
     public function onBootstrap(MvcEvent $event)
     {
-        $eventManager = $event->getApplication()->getEventManager();
+        $application    = $event->getApplication();
+        $eventManager   = $application->getEventManager();
+        $serviceManager = $application->getServiceManager();
 
-        $eventManager->attach(new Listener\Login());
-        $eventManager->attach(new Listener\Route());
-        $eventManager->attach(new Listener\Render());
-        $eventManager->attach(new Listener\UnauthorizedListener());
+        $eventManager->attach($serviceManager->get('MyBackend\Listener\LoginListener'));
+        $eventManager->attach($serviceManager->get('MyBackend\Listener\RenderListener'));
+        $eventManager->attach($serviceManager->get('MyBackend\Listener\RouteListener'));
+        $eventManager->attach($serviceManager->get('MyBackend\Listener\UnauthorizedListener'));
     }
 
     /**
@@ -35,16 +36,5 @@ class Module extends AbstractModule implements
             'user create [--username=] [--email=] [--roles=]' => 'Create a new user',
             'user delete [--id=] [--username=] [--email=]' => 'Delete a user',
         ];
-    }
-
-    /**
-     * Expected to return \Zend\ServiceManager\Config object or array to
-     * seed such an object.
-     *
-     * @return array|\Zend\ServiceManager\Config
-     */
-    public function getServiceConfig()
-    {
-        // TODO: Implement getServiceConfig() method.
     }
 }

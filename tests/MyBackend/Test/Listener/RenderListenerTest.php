@@ -7,13 +7,13 @@
 
 namespace MyBackend\Test\Listener;
 
-use MyBackend\Listener\Render;
+use MyBackend\Listener\RenderListener;
 use PHPUnit_Framework_TestCase;
 use Zend\EventManager\EventManager;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\CallbackHandler;
 
-class RenderTest extends PHPUnit_Framework_TestCase
+class RenderListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var EventManager
@@ -21,14 +21,14 @@ class RenderTest extends PHPUnit_Framework_TestCase
     protected $eventManager;
 
     /**
-     * @var Render
+     * @var RenderListener
      */
     protected $listener;
 
     public function setUp()
     {
         $this->eventManager = new EventManager();
-        $this->listener = new Render();
+        $this->listener = new RenderListener();
     }
 
     public function testAttach()

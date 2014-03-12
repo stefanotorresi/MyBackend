@@ -5,14 +5,14 @@
  * ************************************************
  */
 
-namespace MyBackend\Mapper;
+namespace MyBackend\Mapper\Doctrine;
 
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZfcUserDoctrineORM\Options\ModuleOptions;
 
-class UserMapperFactory implements FactoryInterface
+class DoctrineUserMapperFactory implements FactoryInterface
 {
     /**
      * Create service
@@ -28,6 +28,6 @@ class UserMapperFactory implements FactoryInterface
         /** @var ModuleOptions $options */
         $options = $serviceLocator->get('zfcuser_module_options');
 
-        return new UserMapper($entityManager, $options);
+        return $entityManager->getRepository($options->getUserEntityClass());
     }
 }

@@ -7,7 +7,6 @@
 
 namespace MyBackend\Controller;
 
-use MyBackend\Mapper\DeleteCapableUserMapper;
 use MyBackend\Service\Exception\UserServiceException;
 use MyBase\Controller\AbstractConsoleController;
 use MyBackend\Entity;
@@ -92,9 +91,7 @@ class UserConsoleController extends AbstractConsoleController
         try {
             $this->getUserService()->addRolesToUser($roles, $user);
         } catch (\Exception $e) {
-            if ($userMapper instanceof DeleteCapableUserMapper) {
-                $userMapper->delete($user); // rollback if we can't update user with roles
-            }
+            $userMapper->remove($user); // rollback if we can't update user with roles
 
             if ($e instanceof UserServiceException) {
                 $console->writeLine();

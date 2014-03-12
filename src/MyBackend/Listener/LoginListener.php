@@ -8,15 +8,29 @@
 
 namespace MyBackend\Listener;
 
-use MyBackend\Options\ModuleOptions;
+use LazyProperty\LazyPropertiesTrait;
+use MyBackend\Options\ModuleOptionsAwareInterface;
+use MyBackend\Options\ModuleOptionsAwareTrait;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Http\Request as HttpRequest;
+use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use ZfcUser\Controller\UserController;
 
-class Login extends AbstractListenerAggregate
+class LoginListener extends AbstractListenerAggregate implements ModuleOptionsAwareInterface
 {
+    use LazyPropertiesTrait;
+    use ModuleOptionsAwareTrait;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->initLazyProperties(['moduleOptions']);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -26,8 +40,8 @@ class Login extends AbstractListenerAggregate
     }
 
     /**
-     * @param  MvcEvent         $e
-     * @return HttpRequest|null
+     * @param  MvcEvent          $e
+     * @return HttpResponse|null
      */
     public function preDispatch(MvcEvent $e)
     {
@@ -50,13 +64,10 @@ class Login extends AbstractListenerAggregate
             return;
         }
 
-        /** @var ModuleOptions $options  */
-        $options = $e->getApplication()->getServiceManager()->get('MyBackend\Options\ModuleOptions');
+        $adminUrl = $router->assemble([], ['name' => $this->moduleOptions->getBackendRoute()]);
 
-        $adminUrl = $router->assemble([], ['name' => $options->getBackendRoute()]);
-
-        if ($request->getQuery('redirect') === $adminUrl || $options->getDisableFrontendLogin()) {
-            $url = $router->assemble([], ['name' => $options->getBackendLoginRoute()]);
+        if ($request->getQuery('redirect') === $adminUrl || $this->moduleOptions->getDisableFrontendLogin()) {
+            $url = $router->assemble([], ['name' => $this->moduleOptions->getBackendLoginRoute()]);
 
             $response = $e->getResponse();
             $response->getHeaders()->addHeaderLine('Location', $url);

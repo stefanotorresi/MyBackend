@@ -5,22 +5,21 @@
  * ************************************************
  */
 
-namespace MyBackend\Mapper\Doctrine;
+namespace MyBackend\Listener;
 
-use MyBackend\Entity\Role;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class DoctrineRoleMapperFactory implements FactoryInterface
+class UnauthorizedListenerFactory implements FactoryInterface
 {
     /**
      * Create service
      *
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @return UnauthorizedListener
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $serviceLocator->get('Doctrine\ORM\EntityManager')->getRepository(Role::fqcn());
+        return new UnauthorizedListener($serviceLocator->get('ZfcRbac\Service\AuthorizationService'));
     }
 }

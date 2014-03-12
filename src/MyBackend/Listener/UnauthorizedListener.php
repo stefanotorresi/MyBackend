@@ -7,9 +7,11 @@
 
 namespace MyBackend\Listener;
 
+use LazyProperty\LazyPropertiesTrait;
 use MyBackend\Entity\Fixture\PermissionFixture;
 use MyBackend\Module as MyBackend;
-use MyBackend\Options\ModuleOptions;
+use MyBackend\Options\ModuleOptionsAwareInterface;
+use MyBackend\Options\ModuleOptionsAwareTrait;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Http\Request as HttpRequest;
@@ -18,12 +20,10 @@ use Zend\Mvc\MvcEvent;
 use ZfcRbac\Guard\AbstractGuard;
 use ZfcRbac\Service\AuthorizationService;
 
-class UnauthorizedListener extends AbstractListenerAggregate
+class UnauthorizedListener extends AbstractListenerAggregate implements ModuleOptionsAwareInterface
 {
-    /**
-     * @var ModuleOptions
-     */
-    protected $moduleOptions;
+    use LazyPropertiesTrait;
+    use ModuleOptionsAwareTrait;
 
     /**
      * @var AuthorizationService
@@ -31,12 +31,11 @@ class UnauthorizedListener extends AbstractListenerAggregate
     protected $authorizationService;
 
     /**
-     * @param ModuleOptions        $moduleOptions
      * @param AuthorizationService $authorizationService
      */
-    public function __construct(ModuleOptions $moduleOptions, AuthorizationService $authorizationService)
+    public function __construct(AuthorizationService $authorizationService)
     {
-        $this->moduleOptions        = $moduleOptions;
+        $this->initLazyProperties(['moduleOptions']);
         $this->authorizationService = $authorizationService;
     }
 

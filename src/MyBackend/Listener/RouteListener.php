@@ -8,14 +8,27 @@
 
 namespace MyBackend\Listener;
 
+use LazyProperty\LazyPropertiesTrait;
 use MyBackend\Module as MyBackend;
-use MyBackend\Options\ModuleOptions;
+use MyBackend\Options\ModuleOptionsAwareInterface;
+use MyBackend\Options\ModuleOptionsAwareTrait;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
 
-class Route extends AbstractListenerAggregate
+class RouteListener extends AbstractListenerAggregate implements ModuleOptionsAwareInterface
 {
+    use LazyPropertiesTrait;
+    use ModuleOptionsAwareTrait;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->initLazyProperties(['moduleOptions']);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -24,15 +37,15 @@ class Route extends AbstractListenerAggregate
         $this->listeners[] = $eventManager->attach(MvcEvent::EVENT_ROUTE, [$this, 'selectModule'], -1);
     }
 
+    /**
+     * @param MvcEvent $e
+     */
     public function selectModule(MvcEvent $e)
     {
         $routeName      = $e->getRouteMatch()->getMatchedRouteName();
         $serviceManager = $e->getApplication()->getServiceManager();
 
-        /** @var ModuleOptions $options  */
-        $options = $serviceManager->get('MyBackend\Options\ModuleOptions');
-
-        $parentRoute = $options->getBackendRoute();
+        $parentRoute = $this->moduleOptions->getBackendRoute();
 
         if (strpos($routeName, $parentRoute) !== 0) {
             return;

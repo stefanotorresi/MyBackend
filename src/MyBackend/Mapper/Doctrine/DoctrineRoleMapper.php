@@ -7,11 +7,10 @@
 
 namespace MyBackend\Mapper\Doctrine;
 
-use Doctrine\ORM\EntityRepository;
 use MyBackend\Mapper\RoleMapperInterface;
-use MyBase\Doctrine\EntityMapperTrait;
+use MyBase\Doctrine\EntityMapper;
 
-class DoctrineRoleMapper extends EntityRepository implements RoleMapperInterface
+class DoctrineRoleMapper extends EntityMapper implements RoleMapperInterface
 {
-    use EntityMapperTrait;
+
 }

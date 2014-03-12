@@ -7,7 +7,9 @@
 
 namespace MyBackend\Mapper;
 
-interface DeleteCapableUserMapper
+use ZfcUser\Mapper\UserInterface as ZfcUserMapperInterface;
+
+interface UserMapperInterface extends ZfcUserMapperInterface
 {
-    public function delete($whereOrEntity, $tableName = null);
+    public function remove($entity);
 }
