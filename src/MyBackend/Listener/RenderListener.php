@@ -84,5 +84,4 @@ class RenderListener extends AbstractListenerAggregate implements ModuleOptionsA
         $viewHelperManager->get('headtitle')->setTranslatorTextDomain($translatorDomain);
         $viewHelperManager->get('formElementErrors')->setTranslatorTextDomain($translatorDomain);
     }
-
 }
