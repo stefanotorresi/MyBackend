@@ -8,9 +8,9 @@
 namespace MyBackend\Test\Options;
 
 use MyBackend\Options\ModuleOptionsAwareInitializer;
-use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use PHPUnit_Framework_TestCase as TestCase;
 use MyBackend\Options\ModuleOptions;
+use stdClass;
 
 class ModuleOptionsAwareInitializerTest extends TestCase
 {

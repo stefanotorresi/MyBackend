@@ -34,8 +34,8 @@ class Module extends AbstractModule implements
         if ($options->getLoadDefaultUserMapping()) {
             $doctrineDriverChain = $serviceManager->get('doctrine.driver.orm_default');
             $doctrineDriverChain->addDriver(
-                new XmlDriver(__DIR__ . '/../../config/optional'),
-                'MyBackend\DefaultEntity'
+                new XmlDriver(__DIR__ . '/../../config/mappings', '.dcm.optional.xml'),
+                'MyBackend\Entity\User'
             );
         }
     }

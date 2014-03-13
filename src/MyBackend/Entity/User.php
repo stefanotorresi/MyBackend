@@ -5,9 +5,7 @@
  * ************************************************
  */
 
-namespace MyBackend\DefaultEntity;
-
-use MyBackend\Entity\AbstractUser;
+namespace MyBackend\Entity;
 
 class User extends AbstractUser
 {

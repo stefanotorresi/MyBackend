@@ -68,14 +68,15 @@ return [
             __NAMESPACE__ => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
                 'paths' => [
-                    __DIR__ . '/mappings',
-                    __DIR__ . '/optional'
+                    __DIR__ . '/mappings'
                 ]
             ],
             'orm_default' =>[
                 'drivers' => [
-                    __NAMESPACE__ . '\Entity' => __NAMESPACE__,
-                    __NAMESPACE__ . '\DefayltEntity' => __NAMESPACE__,
+                    // singular entries to let User be optional
+                    'MyBackend\Entity\Role'         => __NAMESPACE__,
+                    'MyBackend\Entity\Permission'   => __NAMESPACE__,
+                    'MyBackend\Entity\AbstractUser' => __NAMESPACE__,
                 ]
             ]
         ]

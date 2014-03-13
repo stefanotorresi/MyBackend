@@ -8,7 +8,7 @@
 namespace MyBackend\Test\Entity;
 
 use MyBackend\Entity\Role;
-use MyBackend\Entity\AbstractUser;
+use MyBackend\Entity\User;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class UserTest extends TestCase
@@ -19,7 +19,7 @@ class UserTest extends TestCase
      */
     public function testAddHasRemoveRole($role)
     {
-        $user = new AbstractUser();
+        $user = new User();
 
         $this->assertTrue($user->addRole($role));
         $this->assertTrue($user->hasRole($role));
@@ -41,7 +41,7 @@ class UserTest extends TestCase
     public function testTryingAddMultipleTimesReturnsFalse()
     {
         $role = new Role('test');
-        $user = new AbstractUser();
+        $user = new User();
         $this->assertTrue($user->addRole($role));
         $this->assertFalse($user->addRole($role));
         $this->assertCount(1, $user->getRoles());
@@ -50,7 +50,7 @@ class UserTest extends TestCase
     public function testTryingRemoveMultipleTimesReturnsFalse()
     {
         $role = new Role('test');
-        $user = new AbstractUser();
+        $user = new User();
         $user->addRole($role);
 
         $this->assertTrue($user->removeRole($role));
