@@ -37,6 +37,8 @@ class RbacIntegrationTest extends TestCase
     {
         $serviceManager = Bootstrap::getServiceManager();
 
+        $serviceManager->get('Application')->bootstrap();
+
         /** @var EntityManager $entityManager */
         $entityManager = $serviceManager->get('Doctrine\ORM\EntityManager');
 

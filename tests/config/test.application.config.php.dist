@@ -7,6 +7,7 @@ return [
         'ZfcUser',
         'ZfcUserDoctrineORM',
         'ZfcRbac',
+        'MyBase',
         'MyBackend',
     ],
     'module_listener_options' => [

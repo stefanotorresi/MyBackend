@@ -4,7 +4,7 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                                       http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <mapped-superclass name="MyBackend\Entity\AbstractUser" repository-class="MyBackend\Mapper\Doctrine\DoctrineRoleMapper">
+    <mapped-superclass name="MyBackend\Entity\AbstractUser" repository-class="MyBackend\Mapper\Doctrine\DoctrineUserMapper">
 
         <many-to-many target-entity="Role" field="roles" index-by="name">
             <cascade>

@@ -13,6 +13,11 @@ use PHPUnit_Framework_TestCase as TestCase;
 
 class ServicesConfigurationTest extends TestCase
 {
+    public function setUp()
+    {
+        $this->serviceManager = Bootstrap::getServiceManager();
+    }
+
     /**
      * @dataProvider servicesProvider
      * @param $locatorInstance
@@ -21,12 +26,11 @@ class ServicesConfigurationTest extends TestCase
      */
     public function testServicesConfiguration($locatorInstance, $name, $class)
     {
-        $serviceManager = Bootstrap::getServiceManager();
 
         $serviceLocator = $locatorInstance == 'ServiceManager' ?
-            $serviceManager : $serviceManager->get($locatorInstance);
+            $this->serviceManager : $this->serviceManager->get($locatorInstance);
 
-        $serviceManager->get('Application')->bootstrap();
+        $this->serviceManager->get('Application')->bootstrap();
 
         $this->assertTrue($serviceLocator->has($name));
         $service = $serviceLocator->get($name);
@@ -34,7 +38,7 @@ class ServicesConfigurationTest extends TestCase
 
         // ensure that MyBackend\Options\ModuleOptionsAwareInitializer is registered
         if ($service instanceof ModuleOptionsAwareInterface) {
-            $this->assertSame($serviceManager->get('MyBackend\Options\ModuleOptions'), $service->getModuleOptions());
+            $this->assertSame($this->serviceManager->get('MyBackend\Options\ModuleOptions'), $service->getModuleOptions());
         }
     }
 

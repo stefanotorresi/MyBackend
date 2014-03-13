@@ -5,7 +5,7 @@
                                       http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="MyBackend\Entity\User" table="mbe_users">
-        <field name="asd" type="string" />
+
     </entity>
 
 </doctrine-mapping>
