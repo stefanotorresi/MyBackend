@@ -57,6 +57,11 @@ class ModuleOptions extends AbstractOptions
     protected $title = 'My Backend';
 
     /**
+     * @var bool
+     */
+    protected $loadDefaultUserMapping = true;
+
+    /**
      * @return boolean
      */
     public function getDisableFrontendLogin()
@@ -202,5 +207,21 @@ class ModuleOptions extends AbstractOptions
     public function setTitle($title)
     {
         $this->title = $title;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getLoadDefaultUserMapping()
+    {
+        return $this->loadDefaultUserMapping;
+    }
+
+    /**
+     * @param boolean $loadDefaultUserMapping
+     */
+    public function setLoadDefaultUserMapping($loadDefaultUserMapping)
+    {
+        $this->loadDefaultUserMapping = $loadDefaultUserMapping;
     }
 }

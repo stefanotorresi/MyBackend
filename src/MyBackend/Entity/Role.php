@@ -8,29 +8,18 @@
 namespace MyBackend\Entity;
 
 use Doctrine\Common\Collections;
-use Doctrine\ORM\Mapping as ORM;
 use MyBase\Entity\Entity;
-use Rbac\Role\RoleInterface;
 use ZfcRbac\Permission\PermissionInterface;
 
-/**
- * @ORM\Entity(repositoryClass="MyBackend\Mapper\Doctrine\DoctrineRoleMapper")
- * @ORM\Table(name="mbe_roles")
- */
 class Role extends Entity implements RoleInterface
 {
     /**
      * @var string|null
-     *
-     * @ORM\Column(type="string", length=32, unique=true)
      */
     protected $name;
 
     /**
      * @var PermissionInterface[]|Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Permission", indexBy="name", cascade={"persist"}, fetch="EAGER")
-     * @ORM\JoinTable(name="mbe_roles_permissions")
      */
     protected $permissions;
 
@@ -67,27 +56,73 @@ class Role extends Entity implements RoleInterface
     }
 
     /**
-     * Add a permission
+     * {@inheritdoc}
+     */
+    public function getPermissions()
+    {
+        return $this->permissions;
+    }
+
+    /**
+     * Add a permission. If it's not a Permission instance, creates a new one
      *
-     * @param  PermissionInterface|string $permission
-     * @return self
+     * @param  Permission|string $permission
+     * @return bool
      */
     public function addPermission($permission)
     {
-        if (is_string($permission)) {
+        if (! $permission instanceof Permission) {
             $permission = new Permission($permission);
         }
 
-        $this->permissions[(string) $permission] = $permission;
+        if ($this->permissions->contains($permission)) {
+            return false;
+        }
 
-        return $this;
+        return $this->permissions->add($permission);
+    }
+
+    /**
+     * @param  Permission|string $permission
+     * @return bool
+     */
+    public function removePermission($permission)
+    {
+        if (is_string($permission)) {
+            // @todo replace this with Criteria API as soon as it gets implemented for persistent collections on MtM
+            // see https://github.com/doctrine/doctrine2/pull/885/
+            $search = $this->permissions->filter(function (Permission $p) use ($permission) {
+                return $p->getName() === $permission;
+            })->toArray();
+            $permission = array_shift($search);
+        }
+
+        return $this->permissions->removeElement($permission);
+    }
+
+    /**
+     * @param  Permission|string $permission
+     * @return bool
+     */
+    public function hasPermission($permission)
+    {
+        if (is_string($permission)) {
+            // @todo replace this with Criteria API as soon as it gets implemented for persistent collections on MtM
+            // see https://github.com/doctrine/doctrine2/pull/885/
+            $search = $this->permissions->filter(function (Permission $p) use ($permission) {
+                return $p->getName() === $permission;
+            })->toArray();
+            $permission = array_shift($search);
+        }
+
+        return $this->permissions->contains($permission);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function hasPermission($permission)
+    public function __toString()
     {
-        return isset($this->permissions[(string) $permission]);
+        return $this->getName();
     }
 }

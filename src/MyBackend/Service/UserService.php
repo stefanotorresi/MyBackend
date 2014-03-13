@@ -7,7 +7,8 @@
 
 namespace MyBackend\Service;
 
-use MyBackend\Entity\User;
+use MyBackend\Entity\RbacUserInterface;
+use MyBackend\Entity\Role;
 use MyBackend\Mapper\RoleMapperInterface;
 use MyBackend\Mapper\UserMapperInterface;
 use Rbac\Role\RoleInterface;
@@ -18,7 +19,7 @@ use ZfcUser\Service\User as ZfcUserService;
  * @package MyBackend\Service
  * @method UserMapperInterface getUserMapper()
  */
-class UserService extends ZfcUserService
+class UserService extends ZfcUserService implements RbacUserServiceInterface
 {
     /**
      * @var RoleMapperInterface
@@ -26,36 +27,35 @@ class UserService extends ZfcUserService
     protected $roleMapper;
 
     /**
+     * Adds a role to a user. If role doesn't exists yet, creates a new one.
+     *
      * @param  RoleInterface|string           $role
-     * @param  User                           $user
+     * @param  RbacUserInterface              $user
      * @param  bool                           $update
      * @throws Exception\UserServiceException
      */
-    public function addRoleToUser($role, User $user, $update = true)
+    public function addRoleToUser($role, RbacUserInterface $user, $update = true)
     {
-        if ($role instanceof RoleInterface) {
-            $role = $role->getName();
-        } else {
-            $role = (string) $role;
+        if (! $role instanceof RoleInterface) {
+            $role = $this->getRoleMapper()->findOneByName((string) $role) ?: $role;
         }
 
-        $roleEntity = $this->getRoleMapper()->findOneByName($role);
-
-        if (! $roleEntity) {
-            throw new Exception\UserServiceException("'$role' role not found.");
-        }
-
-        $user->addRole($roleEntity);
+        $user->addRole($role);
 
         if ($update) {
             $this->getUserMapper()->update($user);
         }
     }
 
-    public function addRolesToUser($roles, User $user, $update = true)
+    /**
+     * @param $roles
+     * @param RbacUserInterface $user
+     * @param bool              $update
+     */
+    public function addRoleListToUser($roles, RbacUserInterface $user, $update = true)
     {
         foreach ($roles as $role) {
-            $this->addRoleToUser($role, $user, false);
+            $user->addRole($role);
         }
 
         if ($update) {
@@ -76,9 +76,9 @@ class UserService extends ZfcUserService
     }
 
     /**
-     * @param mixed $roleMapper
+     * @param RoleMapperInterface $roleMapper
      */
-    public function setRoleMapper($roleMapper)
+    public function setRoleMapper(RoleMapperInterface $roleMapper)
     {
         $this->roleMapper = $roleMapper;
     }

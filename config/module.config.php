@@ -21,6 +21,7 @@ return [
 //        'template'                  => 'my-backend/layout/layout',
 //        'cache_bust_index'          => mt_rand(),
 //        'title'                     => 'My Backend',
+//        'load_default_user_mapping' => true,
     ],
 
     'navigation' => [
@@ -65,12 +66,16 @@ return [
     'doctrine' => [
         'driver' => [
             __NAMESPACE__ => [
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'paths' => [__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity']
+                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+                'paths' => [
+                    __DIR__ . '/mappings',
+                    __DIR__ . '/optional'
+                ]
             ],
             'orm_default' =>[
                 'drivers' => [
-                    __NAMESPACE__ . '\Entity' => __NAMESPACE__
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__,
+                    __NAMESPACE__ . '\DefayltEntity' => __NAMESPACE__,
                 ]
             ]
         ]

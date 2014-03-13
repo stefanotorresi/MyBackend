@@ -4,7 +4,7 @@ return array(
   'MyBackend\Controller\AdminController'       => __DIR__ . '/src/MyBackend/Controller/AdminController.php',
   'MyBackend\Entity\Permission'                => __DIR__ . '/src/MyBackend/Entity/Permission.php',
   'MyBackend\Entity\Role'                      => __DIR__ . '/src/MyBackend/Entity/Role.php',
-  'MyBackend\Entity\User'                      => __DIR__ . '/src/MyBackend/Entity/User.php',
+//  'MyBackend\Entity\User'                      => __DIR__ . '/src/MyBackend/Entity/User.php',
   'MyBackend\Listener\Login'                   => __DIR__ . '/src/MyBackend/Listener/Login.php',
   'MyBackend\Listener\Render'                  => __DIR__ . '/src/MyBackend/Listener/Render.php',
   'MyBackend\Listener\Route'                   => __DIR__ . '/src/MyBackend/Listener/Route.php',

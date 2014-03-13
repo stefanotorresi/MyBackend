@@ -62,4 +62,17 @@ class Permission extends Entity implements PermissionInterface
     {
         return $this->name;
     }
+
+    /**
+     * @param ORM\ClassMetadata $metadata
+     */
+    public static function loadMetadata(ORM\ClassMetadata $metadata)
+    {
+        $builder = new ORM\Builder\ClassMetadataBuilder($metadata);
+        $builder->setTable('mbe_permissions');
+        $builder->addField('name', 'string', [
+            'length' => 128,
+            'unique' => true
+        ]);
+    }
 }

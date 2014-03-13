@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <mapped-superclass name="MyBackend\Entity\AbstractUser" repository-class="MyBackend\Mapper\Doctrine\DoctrineRoleMapper">
+
+        <many-to-many target-entity="Role" field="roles" index-by="name">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+            <join-table name="mbe_users_roles">
+                <join-columns>
+                    <join-column name="user_id" referenced-column-name="user_id" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="role_id" referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+        <attribute-overrides>
+            <attribute-override name="password">
+                <field nullable="true" />
+            </attribute-override>
+        </attribute-overrides>
+
+    </mapped-superclass>
+
+</doctrine-mapping>

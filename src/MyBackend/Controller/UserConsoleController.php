@@ -34,10 +34,15 @@ class UserConsoleController extends AbstractConsoleController
      */
     public function createAction()
     {
-        $username       = $this->params('username') ?: Prompt\Line::prompt('Please enter a username: ', false, 255);
-        $email          = $this->params('email') ?: Prompt\Line::prompt('Please enter an email: ', false, 255);
-        $displayName    = $this->getUserService()->getOptions()->getEnableDisplayName() ?
-            Prompt\Line::prompt('Please enter a display name: ', false, 50) : null;
+        $username    =  $this->getUserService()->getOptions()->getEnableUsername() ?
+            ($this->params('username') ?: Prompt\Line::prompt('Please enter a username: ', false, 255))
+            : null;
+
+        $email       = $this->params('email') ?: Prompt\Line::prompt('Please enter an email: ', false, 255);
+
+        $displayName = $this->getUserService()->getOptions()->getEnableDisplayName() ?
+            Prompt\Line::prompt('Please enter a display name: ', false, 50)
+            : null;
 
         $console = $this->getConsole();
 
@@ -55,14 +60,19 @@ class UserConsoleController extends AbstractConsoleController
 
         $console->writeLine();
 
-        $roles = $this->params('roles') ?: Prompt\Line::prompt('Please enter a comma separated list of user roles: [guest] ', true, 32);
+        $roles = $this->params('roles') ?: Prompt\Line::prompt(
+            'Please enter a comma separated list of user roles: [guest] ',
+            true,
+            32
+        );
+
         if (empty($roles)) {
             $roles = 'guest';
         }
 
         $roles = explode(',', $roles);
 
-        /** @var Entity\User $user */
+        /** @var Entity\AbstractUser $user */
         $user = $this->getUserService()->register([
             'username'          => $username,
             'email'             => $email,
@@ -89,7 +99,7 @@ class UserConsoleController extends AbstractConsoleController
         $userMapper = $this->getUserService()->getUserMapper();
 
         try {
-            $this->getUserService()->addRolesToUser($roles, $user);
+            $this->getUserService()->addRoleListToUser($roles, $user);
         } catch (\Exception $e) {
             $userMapper->remove($user); // rollback if we can't update user with roles
 
@@ -133,7 +143,7 @@ class UserConsoleController extends AbstractConsoleController
             if (array_key_exists($searchKey, $search)) {
                 $searchValue = $search[$searchKey];
                 $searchMultipleKeys = false;
-            } elseif ( isset($search['unknown']) ) {
+            } elseif (isset($search['unknown'])) {
                 $searchValue = $search['unknown'];
             }
 
@@ -148,7 +158,7 @@ class UserConsoleController extends AbstractConsoleController
             }
         }
 
-        if (! $user instanceof Entity\User) {
+        if (! $user instanceof Entity\AbstractUser) {
             $console->writeLine(PHP_EOL.'User not found', Color::RED);
 
             return;

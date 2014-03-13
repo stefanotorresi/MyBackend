@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="MyBackend\Entity\Role" table="mbe_roles" repository-class="MyBackend\Mapper\Doctrine\DoctrineRoleMapper">
+
+        <field name="name" type="string" length="32" unique="true" />
+
+        <many-to-many target-entity="MyBackend\Entity\Permission" field="permissions" fetch="EAGER" index-by="name">
+            <cascade>
+                <cascade-persist />
+            </cascade>
+            <join-table name="mbe_roles_permissions">
+                <join-columns>
+                    <join-column name="role_id" referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column name="permission_id" referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+    </entity>
+
+</doctrine-mapping>

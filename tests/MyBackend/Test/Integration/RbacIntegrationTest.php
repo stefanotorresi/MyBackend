@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use MyBackend\Entity\Permission;
 use MyBackend\Entity\Role;
-use MyBackend\Entity\User;
+use MyBackend\Entity\AbstractUser;
 use MyBackend\Service\UserService;
 use MyBackend\Test\Bootstrap;
 use PHPUnit_Framework_TestCase as TestCase;
@@ -60,7 +60,7 @@ class RbacIntegrationTest extends TestCase
         ];
         $user = $userService->register($userData);
 
-        if (! $user instanceof User) {
+        if (! $user instanceof AbstractUser) {
             $this->markTestIncomplete('Could not register test user');
         }
 
