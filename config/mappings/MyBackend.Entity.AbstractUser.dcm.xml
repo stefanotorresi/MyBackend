@@ -22,7 +22,7 @@
 
         <attribute-overrides>
             <attribute-override name="password">
-                <field nullable="true" />
+                <field nullable="true" length="128" />
             </attribute-override>
         </attribute-overrides>
 
