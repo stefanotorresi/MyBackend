@@ -32,8 +32,8 @@ class UserService extends ZfcUserService implements RbacUserServiceInterface
 
     /**
      * @param array|Traversable|string|RoleInterface $roles
-     * @param RbacUserInterface $user
-     * @param bool              $update
+     * @param RbacUserInterface                      $user
+     * @param bool                                   $update
      */
     public function addRolesToUser($roles, RbacUserInterface $user, $update = true)
     {

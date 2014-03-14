@@ -26,7 +26,7 @@ interface RbacUserServiceInterface
 
     /**
      * @param array|Traversable|string|RoleInterface $roles
-     * @param RbacUserInterface $user
+     * @param RbacUserInterface                      $user
      */
     public function addRolesToUser($roles, RbacUserInterface $user);
 }

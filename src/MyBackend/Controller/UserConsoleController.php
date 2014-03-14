@@ -40,7 +40,6 @@ class UserConsoleController extends AbstractConsoleController
             Prompt\Line::prompt('Please enter a display name: ', false, 50)
             : null;
 
-
         if ($console instanceof Posix) {
             shell_exec('stty -echo');
         }
