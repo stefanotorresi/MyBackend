@@ -28,28 +28,60 @@ class UserConsoleController extends AbstractConsoleController
      */
     public function createAction()
     {
-        $email = $this->params('email') ?: Prompt\Line::prompt('Please enter an email: ', false, 255);
+        $console = $this->getConsole();
 
-        $username    = $this->getUserService()->getOptions()->getEnableUsername() ?
+        $data['email']      = $this->params('email') ?: Prompt\Line::prompt('Please enter an email: ', false, 255);
+
+        $data['username']   = $this->getUserService()->getOptions()->getEnableUsername() ?
             ($this->params('username') ?: Prompt\Line::prompt('Please enter a username: ', false, 255))
             : null;
 
-        $displayName = $this->getUserService()->getOptions()->getEnableDisplayName() ?
+        $data['displayName'] = $this->getUserService()->getOptions()->getEnableDisplayName() ?
             Prompt\Line::prompt('Please enter a display name: ', false, 50)
             : null;
 
-        $console = $this->getConsole();
 
         if ($console instanceof Posix) {
             shell_exec('stty -echo');
         }
 
-        $password       = Prompt\Line::prompt('Please enter a password: ');
+        $data['password']       = Prompt\Line::prompt('Please enter a password: ');
         $console->writeLine();
-        $passwordVerify = Prompt\Line::prompt('Please confirm the password: ');
+        $data['passwordVerify'] = Prompt\Line::prompt('Please confirm the password: ');
 
         if ($console instanceof Posix) {
             shell_exec('stty echo');
+        }
+
+        /**
+         * @todo instead of removing unknown inputs, collect data dynamically
+         */
+        $form = $this->getUserService()->getRegisterForm();
+        $collectedElements = array_keys($data);
+        foreach ($form as $element) {
+            $elementName = $element->getName();
+            if (! in_array($elementName, $collectedElements)) {
+                $form->remove($elementName);
+                $form->getInputFilter()->remove($elementName);
+            }
+        }
+
+        /** @var Entity\AbstractUser $user */
+        $user = $this->getUserService()->register($data);
+
+        if (! $user) {
+
+            $console->writeLine(PHP_EOL.'Invalid data provided', Color::RED);
+
+            $form = $this->getUserService()->getRegisterForm();
+
+            foreach ($form->getMessages() as $field => $messages) {
+                foreach ($messages as $message) {
+                    $console->writeLine(($form->get($field)->getLabel() ?: $field) . ': ' . $message);
+                }
+            }
+
+            return;
         }
 
         $console->writeLine();
@@ -66,42 +98,17 @@ class UserConsoleController extends AbstractConsoleController
 
         $roles = explode(',', $roles);
 
-        /** @var Entity\AbstractUser $user */
-        $user = $this->getUserService()->register([
-            'username'          => $username,
-            'email'             => $email,
-            'display_name'      => $displayName,
-            'password'          => $password,
-            'passwordVerify'    => $passwordVerify,
-        ]);
-
-        if (! $user) {
-
-            $console->writeLine(PHP_EOL.'Invalid data provided', Color::RED);
-
-            $form = $this->getUserService()->getRegisterForm();
-
-            foreach ($form->getMessages() as $field => $messages) {
-                foreach ($messages as $message) {
-                    $console->writeLine($form->get($field)->getLabel() . ': ' . $message);
-                }
-            }
-
-            return;
-        }
-
-        $userMapper = $this->getUserService()->getUserMapper();
-
         try {
             $this->getUserService()->addRolesToUser($roles, $user);
         } catch (Exception $e) {
+            $userMapper = $this->getUserService()->getUserMapper();
             $userMapper->remove($user); // rollback if we can't update user with roles
             $console->writeLine();
             $console->writeLine("Error: ".$e->getMessage(), Color::RED);
         }
 
         $console->writeLine();
-        $console->writeLine(sprintf('User \'%s\' added', $username), Color::GREEN);
+        $console->writeLine(sprintf('User \'%s\' added', $user->getUsername() ?: $user->getEmail()), Color::GREEN);
     }
 
     public function deleteAction()
