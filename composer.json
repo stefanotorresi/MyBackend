@@ -30,6 +30,9 @@
         "zf-commons/zfc-user-doctrine-orm": "0.*",
         "ocramius/lazy-property": "1.*"
     },
+    "require-dev": {
+        "zendframework/zendframework": "~2.3"
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "1.x-dev",
