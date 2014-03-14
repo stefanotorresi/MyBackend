@@ -12,6 +12,8 @@ use MyBackend\Entity\Role;
 use MyBackend\Mapper\RoleMapperInterface;
 use MyBackend\Mapper\UserMapperInterface;
 use Rbac\Role\RoleInterface;
+use Traversable;
+use Zend\Stdlib\Guard\ArrayOrTraversableGuardTrait;
 use ZfcUser\Service\User as ZfcUserService;
 
 /**
@@ -21,40 +23,31 @@ use ZfcUser\Service\User as ZfcUserService;
  */
 class UserService extends ZfcUserService implements RbacUserServiceInterface
 {
+    use ArrayOrTraversableGuardTrait;
+
     /**
      * @var RoleMapperInterface
      */
     protected $roleMapper;
 
     /**
-     * Adds a role to a user. If role doesn't exists yet, creates a new one.
-     *
-     * @param  RoleInterface|string           $role
-     * @param  RbacUserInterface              $user
-     * @param  bool                           $update
-     * @throws Exception\UserServiceException
-     */
-    public function addRoleToUser($role, RbacUserInterface $user, $update = true)
-    {
-        if (! $role instanceof RoleInterface) {
-            $role = $this->getRoleMapper()->findOneByName((string) $role) ?: $role;
-        }
-
-        $user->addRole($role);
-
-        if ($update) {
-            $this->getUserMapper()->update($user);
-        }
-    }
-
-    /**
-     * @param $roles
+     * @param array|Traversable|string|RoleInterface $roles
      * @param RbacUserInterface $user
      * @param bool              $update
      */
-    public function addRoleListToUser($roles, RbacUserInterface $user, $update = true)
+    public function addRolesToUser($roles, RbacUserInterface $user, $update = true)
     {
+        if (is_string($roles) || $roles instanceof RoleInterface) {
+            $roles = [ $roles ];
+        }
+
+        $this->guardForArrayOrTraversable($roles, '$roles');
+
         foreach ($roles as $role) {
+            if (! $role instanceof RoleInterface) {
+                $existingRole = $this->getRoleMapper()->findOneByName((string) $role);
+                $role = $existingRole ?: $role;
+            }
             $user->addRole($role);
         }
 

@@ -8,7 +8,9 @@
 namespace MyBackend\Service;
 
 use MyBackend\Entity\RbacUserInterface;
+use MyBackend\Entity\RoleInterface;
 use MyBackend\Mapper\RoleMapperInterface;
+use Traversable;
 
 interface RbacUserServiceInterface
 {
@@ -23,14 +25,8 @@ interface RbacUserServiceInterface
     public function setRoleMapper(RoleMapperInterface $roleMapper);
 
     /**
-     * @param  $role
+     * @param array|Traversable|string|RoleInterface $roles
      * @param RbacUserInterface $user
      */
-    public function addRoleToUser($role, RbacUserInterface $user);
-
-    /**
-     * @param  $roles
-     * @param RbacUserInterface $user
-     */
-    public function addRoleListToUser($roles, RbacUserInterface $user);
+    public function addRolesToUser($roles, RbacUserInterface $user);
 }

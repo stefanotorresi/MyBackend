@@ -7,7 +7,7 @@
 
 namespace MyBackend\Controller;
 
-use MyBackend\Service\Exception\UserServiceException;
+use Exception;
 use MyBase\Controller\AbstractConsoleController;
 use MyBackend\Entity;
 use MyBackend\Service\UserService;
@@ -15,7 +15,6 @@ use Zend\Console\Adapter\Posix;
 use Zend\Console\ColorInterface as Color;
 use Zend\Console\Console;
 use Zend\Console\Prompt;
-use Rbac\Rbac;
 
 class UserConsoleController extends AbstractConsoleController
 {
@@ -25,20 +24,15 @@ class UserConsoleController extends AbstractConsoleController
     protected $userService;
 
     /**
-     * @var Rbac $rbac
-     */
-    protected $rbac;
-
-    /**
      *
      */
     public function createAction()
     {
-        $username    =  $this->getUserService()->getOptions()->getEnableUsername() ?
+        $email = $this->params('email') ?: Prompt\Line::prompt('Please enter an email: ', false, 255);
+
+        $username    = $this->getUserService()->getOptions()->getEnableUsername() ?
             ($this->params('username') ?: Prompt\Line::prompt('Please enter a username: ', false, 255))
             : null;
-
-        $email       = $this->params('email') ?: Prompt\Line::prompt('Please enter an email: ', false, 255);
 
         $displayName = $this->getUserService()->getOptions()->getEnableDisplayName() ?
             Prompt\Line::prompt('Please enter a display name: ', false, 50)
@@ -89,7 +83,7 @@ class UserConsoleController extends AbstractConsoleController
 
             foreach ($form->getMessages() as $field => $messages) {
                 foreach ($messages as $message) {
-                    $console->writeLine($form->get($field)->getLabel(). ': '.$message);
+                    $console->writeLine($form->get($field)->getLabel() . ': ' . $message);
                 }
             }
 
@@ -99,17 +93,11 @@ class UserConsoleController extends AbstractConsoleController
         $userMapper = $this->getUserService()->getUserMapper();
 
         try {
-            $this->getUserService()->addRoleListToUser($roles, $user);
-        } catch (\Exception $e) {
+            $this->getUserService()->addRolesToUser($roles, $user);
+        } catch (Exception $e) {
             $userMapper->remove($user); // rollback if we can't update user with roles
-
-            if ($e instanceof UserServiceException) {
-                $console->writeLine();
-                $console->writeLine("Error: ".$e->getMessage(), Color::RED);
-
-                return;
-            }
-            throw $e;
+            $console->writeLine();
+            $console->writeLine("Error: ".$e->getMessage(), Color::RED);
         }
 
         $console->writeLine();
@@ -118,9 +106,9 @@ class UserConsoleController extends AbstractConsoleController
 
     public function deleteAction()
     {
-        $search     = [];
-        $searchKeys = ['username', 'email'];
         $console    = Console::getInstance();
+        $search     = [];
+        $searchKeys = ['email', 'username'];
 
         foreach ($searchKeys as $key) {
             $param = $this->params($key);
@@ -165,13 +153,13 @@ class UserConsoleController extends AbstractConsoleController
         }
 
         $console->writeLine(
-            "User found".PHP_EOL
-            ." Id: \t\t"            .$user->getId().PHP_EOL
-            ." Username: \t"        .$user->getUsername().PHP_EOL
-            ." Email: \t"           .$user->getEmail().PHP_EOL
-            ." Display name: \t"    .$user->getDisplayName().PHP_EOL
-            ." State: \t"           .$user->getState().PHP_EOL
-            ." Roles: \t"           .implode(', ',$user->getRoles())
+            "User found" . PHP_EOL
+            ." Id: \t\t" . $user->getId() . PHP_EOL
+            .($user->getUsername() ? " Username: \t" . $user->getUsername() . PHP_EOL : '')
+            ." Email: \t" . $user->getEmail() . PHP_EOL
+            .($user->getDisplayName() ? " Display name: \t" . $user->getDisplayName() . PHP_EOL : '')
+            .($user->getState() !== null ? " State: \t" . $user->getState() . PHP_EOL : '')
+            .($user->getRoles()->count() ? " Roles: \t" . implode(', ', $user->getRoles()->toArray()) : '')
         );
 
         $confirm = Prompt\Confirm::prompt($console->colorize(
@@ -185,10 +173,10 @@ class UserConsoleController extends AbstractConsoleController
             return;
         }
 
-        $this->getUserService()->getUserMapper()->delete($user);
+        $this->getUserService()->getUserMapper()->remove($user);
 
         $console->writeLine(
-            PHP_EOL.sprintf("User '%s' deleted", $user->getUsername()),
+            PHP_EOL.sprintf("User '%s' deleted", $user->getUsername() ?: $user->getEmail()),
             Color::GREEN
         );
     }
@@ -211,25 +199,5 @@ class UserConsoleController extends AbstractConsoleController
     public function setUserService($userService)
     {
         $this->userService = $userService;
-    }
-
-    /**
-     * @return Rbac
-     */
-    public function getRbac()
-    {
-        if (! $this->rbac) {
-            $this->rbac = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService')->getRbac();
-        }
-
-        return $this->rbac;
-    }
-
-    /**
-     * @param Rbac $rbac
-     */
-    public function setRbac($rbac)
-    {
-        $this->rbac = $rbac;
     }
 }
