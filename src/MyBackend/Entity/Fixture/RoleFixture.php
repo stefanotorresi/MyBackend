@@ -23,10 +23,13 @@ class RoleFixture extends AbstractFixture implements DependentFixtureInterface
         $canLoginAsAdmin      = $this->getReference(PermissionFixture::CAN_LOGIN_AS_ADMIN . '-permission');
         $canUseAdminDashboard = $this->getReference(PermissionFixture::CAN_USE_ADMIN_DASHBOARD . '-permission');
 
-        $roles = [
-            (new Entity\Role(static::ADMIN))->addPermission($canUseAdminDashboard),
-            (new Entity\Role(static::GUEST))->addPermission($canLoginAsAdmin)
-        ];
+        $adminRole = new Entity\Role(static::ADMIN);
+        $adminRole->addPermission($canUseAdminDashboard);
+
+        $guestRole = new Entity\Role(static::GUEST);
+        $guestRole->addPermission($canLoginAsAdmin);
+
+        $roles = [ $adminRole , $guestRole ];
 
         foreach ($roles as $role) {
             if (! $this->hasReference($role->getName().'-role')) {
