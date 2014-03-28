@@ -17,11 +17,12 @@ use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZfcRbac\Exception\UnauthorizedException;
+use ZfcRbac\Mvc\Controller\Plugin\IsGranted;
 
 /**
  * Class AdminController
  * @package MyBackend\Controller
- * @method Plugin\AuthorizationPlugin isGranted()
+ * @method IsGranted isGranted()
  * @method Plugin\LoginPlugin login()
  */
 class AdminController extends AbstractActionController
