@@ -298,7 +298,7 @@ class LoginPluginTest extends TestCase
 
     protected function prepareAuthorizationPlugin($permission, $result, $context = null)
     {
-        $authorizationPlugin = $this->getMock('ZfcRbac\Controller\Plugin\IsGranted', [], [], '', null);
+        $authorizationPlugin = $this->getMock('ZfcRbac\Mvc\Controller\Plugin\IsGranted', [], [], '', null);
         $authorizationPlugin->expects($this->atLeastOnce())
                             ->method('__invoke')
                             ->with($permission, $context)
