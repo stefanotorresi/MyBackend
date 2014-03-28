@@ -66,6 +66,7 @@ class LoginPlugin extends AbstractPlugin implements UserServiceAwareInterface
 
         if (! $form->isValid()) {
             $response->setStatusCode(400);
+
             return $viewModel;
         }
 
@@ -121,7 +122,7 @@ class LoginPlugin extends AbstractPlugin implements UserServiceAwareInterface
     }
 
     /**
-     * @param Dispatchable $controller
+     * @param  Dispatchable                                 $controller
      * @throws \Zend\Mvc\Exception\InvalidArgumentException
      */
     public function setController(Dispatchable $controller)

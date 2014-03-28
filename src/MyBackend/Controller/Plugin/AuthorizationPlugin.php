@@ -40,8 +40,8 @@ class AuthorizationPlugin extends AbstractPlugin implements AuthorizationService
     }
 
     /**
-     * @param string|PermissionInterface $permission
-     * @param mixed                      $context
+     * @param  string|PermissionInterface $permission
+     * @param  mixed                      $context
      * @return bool
      */
     public function isGranted($permission, $context = null)

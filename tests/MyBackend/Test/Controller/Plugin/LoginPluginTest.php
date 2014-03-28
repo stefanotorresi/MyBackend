@@ -217,6 +217,7 @@ class LoginPluginTest extends TestCase
             function ($passedController, $passedAuthResult) use ($authResult) {
                 $this->assertSame($this->controller, $passedController);
                 $this->assertSame($authResult, $passedAuthResult);
+
                 return false;
             }
         );

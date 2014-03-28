@@ -16,7 +16,7 @@ class LoginPluginFactory implements FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param  ServiceLocatorInterface $serviceLocator
      * @return LoginPlugin
      */
     public function createService(ServiceLocatorInterface $serviceLocator)

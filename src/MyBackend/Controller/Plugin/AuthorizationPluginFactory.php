@@ -16,7 +16,7 @@ class AuthorizationPluginFactory implements FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param  ServiceLocatorInterface $serviceLocator
      * @return AuthorizationPlugin
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
