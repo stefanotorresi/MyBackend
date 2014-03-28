@@ -84,7 +84,7 @@ class UnauthorizedListenerTest extends TestCase
         $this->authorizationService
             ->expects($this->exactly(2))
             ->method('isGranted')
-            ->with($this->logicalOr(PermissionFixture::CAN_LOGIN_AS_ADMIN, PermissionFixture::CAN_USE_ADMIN_DASHBOARD))
+            ->with($this->logicalOr(PermissionFixture::GUEST_ACCESS, PermissionFixture::ADMIN_ACCESS))
             ->will($this->returnValue(false));
 
         $this->assertNull($this->listener->onUnauthorizedError($event));
@@ -104,9 +104,9 @@ class UnauthorizedListenerTest extends TestCase
         $this->authorizationService
             ->expects($this->exactly(2))
             ->method('isGranted')
-            ->with($this->logicalOr(PermissionFixture::CAN_LOGIN_AS_ADMIN, PermissionFixture::CAN_USE_ADMIN_DASHBOARD))
+            ->with($this->logicalOr(PermissionFixture::GUEST_ACCESS, PermissionFixture::ADMIN_ACCESS))
             ->will($this->returnCallback(function ($value) {
-                return $value === PermissionFixture::CAN_LOGIN_AS_ADMIN;
+                return $value === PermissionFixture::GUEST_ACCESS;
             }));
 
         $router->expects($this->atLeastOnce())
@@ -136,9 +136,9 @@ class UnauthorizedListenerTest extends TestCase
         $this->authorizationService
             ->expects($this->exactly(2))
             ->method('isGranted')
-            ->with($this->logicalOr(PermissionFixture::CAN_LOGIN_AS_ADMIN, PermissionFixture::CAN_USE_ADMIN_DASHBOARD))
+            ->with($this->logicalOr(PermissionFixture::GUEST_ACCESS, PermissionFixture::ADMIN_ACCESS))
             ->will($this->returnCallback(function ($value) {
-                return $value === PermissionFixture::CAN_USE_ADMIN_DASHBOARD;
+                return $value === PermissionFixture::ADMIN_ACCESS;
             }));
 
         $router->expects($this->atLeastOnce())

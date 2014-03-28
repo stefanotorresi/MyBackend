@@ -74,13 +74,13 @@ class UnauthorizedListener extends AbstractListenerAggregate implements ModuleOp
             return;
         }
 
-        $canUseAdminDashboard = $this->authorizationService->isGranted(PermissionFixture::CAN_USE_ADMIN_DASHBOARD);
-        $canLoginAsAdmin      = $this->authorizationService->isGranted(PermissionFixture::CAN_LOGIN_AS_ADMIN);
-        $backendLoginRoute    = $this->moduleOptions->getBackendLoginRoute();
-        $backendRoute         = $this->moduleOptions->getBackendRoute();
+        $hasAdminAccess     = $this->authorizationService->isGranted(PermissionFixture::ADMIN_ACCESS);
+        $hasGuestAccess     = $this->authorizationService->isGranted(PermissionFixture::GUEST_ACCESS);
+        $backendLoginRoute  = $this->moduleOptions->getBackendLoginRoute();
+        $backendRoute       = $this->moduleOptions->getBackendRoute();
 
         // unauthorized admin backend request, bail out and let zfcrbac handle it
-        if (! $canUseAdminDashboard && ! $canLoginAsAdmin) {
+        if (! $hasAdminAccess && ! $hasGuestAccess) {
             return;
         }
 
@@ -89,7 +89,7 @@ class UnauthorizedListener extends AbstractListenerAggregate implements ModuleOp
 
         // redirect backend login page to dashboard if admin is already logged in, otherwise redirect to backend login
         $url = $router->assemble([], [
-            'name' => ($routeName === $backendLoginRoute && $canUseAdminDashboard) ? $backendRoute : $backendLoginRoute
+            'name' => ($routeName === $backendLoginRoute && $hasAdminAccess) ? $backendRoute : $backendLoginRoute
         ]);
 
         $event->stopPropagation(true);

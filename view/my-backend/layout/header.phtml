@@ -6,9 +6,11 @@
  * ************************************************
  */
 
+use MyBackend\Entity\Fixture\PermissionFixture;
+
 $this->placeHolder('title')->set('<h2 class="title">'.$this->escapeHtml($this->layout()->title).'</h2>');
 
-if ($this->isGranted('admin-dashboard')) {
+if ($this->isGranted(PermissionFixture::ADMIN_ACCESS)) {
     $this->placeHolder('title')->setPrefix('<div class="span6">')->setPostfix('</div>');
 }
 
@@ -33,7 +35,7 @@ $this->placeHolder('nav-lang')->captureEnd();
 
         <?= $this->placeHolder('title') ?>
 
-        <?php if ($this->isGranted('admin-dashboard')) : ?>
+        <?php if ($this->isGranted(PermissionFixture::ADMIN_ACCESS)) : ?>
 
         <nav id="nav-secondary" class="span6">
             <?= $this->placeHolder('nav-lang') ?>
@@ -64,7 +66,7 @@ $this->placeHolder('nav-lang')->captureEnd();
 
     </div>
 
-    <?php if ($this->isGranted('admin-dashboard')) : ?>
+    <?php if ($this->isGranted(PermissionFixture::ADMIN_ACCESS)) : ?>
 
 
     <nav id="nav-backend" class="navbar">

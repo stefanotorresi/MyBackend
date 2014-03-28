@@ -12,15 +12,20 @@ $this->layout()->bodyClass = 'login';
 $form = $this->loginForm;
 $form->prepare();
 $form->setAttributes(array(
-    'action' => $this->url('zfcuser/login'),
+    'action' => $this->url('admin/login'),
     'method' => 'post',
     'id' => 'login-form',
 ));
 
-$form->get('identity')->setAttribute('class', 'input-block-level');
-$form->get('credential')->setAttribute('class', 'input-block-level');
-$form->get('submit')->setAttribute('class', 'btn btn-large btn-primary');
-$form->get('submit')->setLabel('Login');
+$form->get('identity')
+     ->setAttributes([ 'class' => 'input-block-level', 'required' => true ]);
+
+$form->get('credential')
+     ->setAttributes([ 'class' => 'input-block-level', 'required' => true ]);
+
+$form->get('submit')
+     ->setAttribute('class', 'btn btn-large btn-primary')
+     ->setLabel('Login');
 
 $this->formElementErrors()->setAttributes(array('class' => 'form-errors'));
 
@@ -28,22 +33,20 @@ $this->formElementErrors()->setAttributes(array('class' => 'form-errors'));
 
 <?= $this->form()->openTag($form) ?>
 
-<dl>
-    <dt><?= $this->formLabel($form->get('identity')) ?></dt>
-    <dd><?= $this->formInput($form->get('identity')) ?></dd>
-
-    <dt><?= $this->formLabel($form->get('credential')) ?></dt>
-    <dd><?= $this->formInput($form->get('credential')) ?></dd>
+    <?= $this->ztbFormElement($form->get('identity')) ?>
+    <?= $this->ztbFormElement($form->get('credential')) ?>
 
     <?php if ($this->redirect): ?>
         <input type="hidden" name="redirect" value="<?= $this->escapeHtmlAttr($this->redirect) ?>" />
     <?php endif ?>
 
-    <dd>
+    <div class="control-group">
         <?= $this->formButton($form->get('submit')) ?>
-    </dd>
-</dl>
-
-<?= $this->formElementErrors($form) ?>
+    </div>
 
 <?= $this->form()->closeTag() ?>
+
+<?= $this->authFailed ?
+    '<div class="auth-ko alert alert-error">Autenticazione fallita. Riprovare.</div>'
+    : '';
+?>

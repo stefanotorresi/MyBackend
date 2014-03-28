@@ -190,6 +190,18 @@ return [
         ],
     ],
 
+    'controller_plugins' => [
+        'factories' => [
+            'MyBackend\Controller\Plugin\AuthorizationPlugin' =>
+                'MyBackend\Controller\Plugin\AuthorizationPluginFactory',
+            'MyBackend\Controller\Plugin\LoginPlugin' => 'MyBackend\Controller\Plugin\LoginPluginFactory'
+        ],
+        'aliases' => [
+            'isGranted' => 'MyBackend\Controller\Plugin\AuthorizationPlugin',
+            'login' => 'MyBackend\Controller\Plugin\LoginPlugin',
+        ],
+    ],
+
     'translator' => [
         'translation_file_patterns' => [
             [

@@ -22,7 +22,6 @@ class Module extends AbstractModule implements
         $eventManager   = $application->getEventManager();
         $serviceManager = $application->getServiceManager();
 
-        $eventManager->attach($serviceManager->get('MyBackend\Listener\LoginListener'));
         $eventManager->attach($serviceManager->get('MyBackend\Listener\RenderListener'));
         $eventManager->attach($serviceManager->get('MyBackend\Listener\RouteListener'));
         $eventManager->attach($serviceManager->get('MyBackend\Listener\UnauthorizedListener'));

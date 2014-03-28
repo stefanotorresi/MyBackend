@@ -4,3 +4,4 @@
 vendor
 composer.lock
 tests/coverage
+tsts/config/test.application.config.php

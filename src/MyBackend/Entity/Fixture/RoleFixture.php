@@ -20,14 +20,14 @@ class RoleFixture extends AbstractFixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $canLoginAsAdmin      = $this->getReference(PermissionFixture::CAN_LOGIN_AS_ADMIN . '-permission');
-        $canUseAdminDashboard = $this->getReference(PermissionFixture::CAN_USE_ADMIN_DASHBOARD . '-permission');
+        $adminAccess = $this->getReference(PermissionFixture::ADMIN_ACCESS . '-permission');
+        $guestAccess = $this->getReference(PermissionFixture::GUEST_ACCESS . '-permission');
 
         $adminRole = new Entity\Role(static::ADMIN);
-        $adminRole->addPermission($canUseAdminDashboard);
+        $adminRole->addPermission($adminAccess);
 
         $guestRole = new Entity\Role(static::GUEST);
-        $guestRole->addPermission($canLoginAsAdmin);
+        $guestRole->addPermission($guestAccess);
 
         $roles = [ $adminRole , $guestRole ];
 

@@ -7,28 +7,52 @@
 
 namespace MyBackend\Service;
 
+use LazyProperty\LazyPropertiesTrait;
 use MyBackend\Entity\RbacUserInterface;
-use MyBackend\Entity\Role;
 use MyBackend\Mapper\RoleMapperInterface;
 use MyBackend\Mapper\UserMapperInterface;
 use Rbac\Role\RoleInterface;
 use Traversable;
 use Zend\Stdlib\Guard\ArrayOrTraversableGuardTrait;
+use ZfcUser\Form\Login as LoginForm;
 use ZfcUser\Service\User as ZfcUserService;
 
 /**
  * Class UserService
  * @package MyBackend\Service
+ * @property UserMapperInterface $userMapper
  * @method UserMapperInterface getUserMapper()
  */
-class UserService extends ZfcUserService implements RbacUserServiceInterface
+class UserService extends ZfcUserService implements
+    UserServiceInterface,
+    RbacUserServiceInterface
 {
+    use LazyPropertiesTrait;
     use ArrayOrTraversableGuardTrait;
 
     /**
      * @var RoleMapperInterface
      */
     protected $roleMapper;
+
+    /**
+     * @var LoginForm
+     */
+    protected $loginForm;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->initLazyProperties([
+            'userMapper',
+            'roleMapper',
+            'registerForm',
+            'options',
+            'loginForm',
+        ]);
+    }
 
     /**
      * @param array|Traversable|string|RoleInterface $roles
@@ -74,5 +98,25 @@ class UserService extends ZfcUserService implements RbacUserServiceInterface
     public function setRoleMapper(RoleMapperInterface $roleMapper)
     {
         $this->roleMapper = $roleMapper;
+    }
+
+    /**
+     * @return LoginForm
+     */
+    public function getLoginForm()
+    {
+        if (! $this->loginForm) {
+            $this->loginForm = $this->getServiceManager()->get('zfcuser_login_form');
+        }
+
+        return $this->loginForm;
+    }
+
+    /**
+     * @param LoginForm $loginForm
+     */
+    public function setLoginForm($loginForm)
+    {
+        $this->loginForm = $loginForm;
     }
 }

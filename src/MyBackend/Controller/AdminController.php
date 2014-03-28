@@ -8,61 +8,90 @@
 
 namespace MyBackend\Controller;
 
+use LazyProperty\LazyPropertiesTrait;
+use MyBackend\Entity\Fixture\PermissionFixture as Permissions;
 use MyBackend\Options\ModuleOptions;
+use MyBackend\Service\UserService;
 use Zend\Http\Request;
+use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
+use ZfcRbac\Exception\UnauthorizedException;
 
+/**
+ * Class AdminController
+ * @package MyBackend\Controller
+ * @method Plugin\AuthorizationPlugin isGranted()
+ * @method Plugin\LoginPlugin login()
+ */
 class AdminController extends AbstractActionController
 {
+    use LazyPropertiesTrait;
+
     /**
      * @var ModuleOptions $moduleOptions
      */
     protected $moduleOptions;
 
+    /**
+     * @var UserService
+     */
+    protected $userService;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->initLazyProperties([ 'userService', 'moduleOptions' ]);
+    }
+
+    /**
+     *
+     */
     public function indexAction()
     {
+        // @todo some dashboard stub template
         return false;
     }
 
+    /**
+     * @throws \ZfcRbac\Exception\UnauthorizedException
+     * @return ViewModel|Response
+     */
     public function loginAction()
     {
-        $backendRoute = $this->getModuleOptions()->getBackendRoute();
+        if ($this->isGranted(Permissions::ADMIN_ACCESS)) {
+            return $this->redirect()->toRoute($this->moduleOptions->getBackendRoute());
+        }
 
-        /** @var \ZfcUser\Options\ModuleOptions $zfcUserOptions  */
-        $zfcUserOptions = $this->getServiceLocator()->get('zfcuser_module_options');
-        $zfcUserOptions->setLoginRedirectRoute($backendRoute);
+        if (! $this->isGranted(Permissions::GUEST_ACCESS)) {
+            throw new UnauthorizedException();
+        }
 
-        $controller = $this;
-        $this->getEvent()->getApplication()->getEventManager()->attach(
-            MvcEvent::EVENT_RENDER,
-            function (MvcEvent $e) use ($controller, $backendRoute) {
-                foreach ($e->getViewModel()->getIterator() as $child) {
-                    /** @var ViewModel $child  */
-                    if ($child->captureTo() === 'content') {
-                        $child->setTemplate('my-backend/login');
-                        $child->setVariable('redirect', $controller->url()->fromRoute($backendRoute));
-                    }
-                }
-            },
-            1000
-        );
+        $data = $this->prg();
 
-        return $this->forward()->dispatch('zfcuser');
+        $assertion = function (AdminController $controller) {
+            return $controller->isGranted(Permissions::ADMIN_ACCESS);
+        };
+
+        return $this->login($data, $this->moduleOptions->getBackendRoute(), $assertion);
     }
 
+    /**
+     * @return mixed
+     */
     public function logoutAction()
     {
         /** @var Request $request */
         $request = $this->getRequest();
-        $request->getQuery()->set('redirect', $this->url()->fromRoute($this->getModuleOptions()->getPostLogoutRoute()));
+        $request->getQuery()->set('redirect', $this->url()->fromRoute($this->moduleOptions->getPostLogoutRoute()));
 
         return $this->forward()->dispatch('zfcuser');
     }
 
     /**
-     * @return \MyBackend\Options\ModuleOptions
+     * @return ModuleOptions
      */
     public function getModuleOptions()
     {
@@ -74,10 +103,30 @@ class AdminController extends AbstractActionController
     }
 
     /**
-     * @param \MyBackend\Options\ModuleOptions $moduleOptions
+     * @param ModuleOptions $moduleOptions
      */
     public function setModuleOptions($moduleOptions)
     {
         $this->moduleOptions = $moduleOptions;
+    }
+
+    /**
+     * @return UserService
+     */
+    public function getUserService()
+    {
+        if (! $this->userService) {
+            $this->userService = $this->getServiceLocator()->get('MyBackend\Service\UserService');
+        }
+
+        return $this->userService;
+    }
+
+    /**
+     * @param UserService $userService
+     */
+    public function setUserService($userService)
+    {
+        $this->userService = $userService;
     }
 }

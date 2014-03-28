@@ -14,14 +14,14 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 
 class PermissionFixture extends AbstractFixture
 {
-    const CAN_LOGIN_AS_ADMIN = 'can-login-as-admin';
-    const CAN_USE_ADMIN_DASHBOARD = 'can-use-admin-dashboard';
+    const ADMIN_ACCESS = 'admin-access';
+    const GUEST_ACCESS  = 'guest-access';
 
     public function load(ObjectManager $manager)
     {
         $permissions = [
-            new Permission(static::CAN_LOGIN_AS_ADMIN),
-            new Permission(static::CAN_USE_ADMIN_DASHBOARD),
+            new Permission(static::ADMIN_ACCESS),
+            new Permission(static::GUEST_ACCESS),
         ];
 
         foreach ($permissions as $permission) {
