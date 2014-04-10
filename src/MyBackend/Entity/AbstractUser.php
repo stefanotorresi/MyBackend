@@ -100,6 +100,26 @@ abstract class AbstractUser extends ZfcUser implements
     }
 
     /**
+     * @param $roles
+     */
+    public function addRoles($roles)
+    {
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+    }
+
+    /**
+     * @param $roles
+     */
+    public function removeRoles($roles)
+    {
+        foreach ($roles as $role) {
+            $this->removeRole($role);
+        }
+    }
+
+    /**
      * @param  Role|string $role
      * @return bool
      */
