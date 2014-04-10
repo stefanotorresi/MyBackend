@@ -44,7 +44,9 @@ class BackendBreadcrumbsFactory implements FactoryInterface
         ]);
 
         foreach ($navBackend->getPages() as $page) {
-            $home->addPage($page);
+            // we must add as a duplicate, not the same instance
+            // for some reason 'clone $page' triggers a fatal during rendering
+            $home->addPage($page->toArray());
         }
 
         $pages = [$home];
