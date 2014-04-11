@@ -8,13 +8,18 @@
 
 use Zend\Mvc\Controller\Plugin\FlashMessenger;
 
-$currentErrorMessages = $this->flashMessenger()->getCurrentMessagesFromNamespace(FlashMessenger::NAMESPACE_ERROR);
-
-if ($currentErrorMessages) {
-    $errorMessages = $currentErrorMessages;
+if ($this->flashMessenger()->hasCurrentErrorMessages()) {
+    $errorMessages = $this->flashMessenger()->getCurrentErrorMessages();
     $this->flashMessenger()->clearCurrentMessagesFromNamespace(FlashMessenger::NAMESPACE_ERROR);
 } else {
-    $errorMessages = $this->flashMessenger(FlashMessenger::NAMESPACE_ERROR);
+    $errorMessages = $this->flashMessenger()->getErrorMessages();
+}
+
+if ($this->flashMessenger()->hasCurrentSuccessMessages()) {
+    $successMessages = $this->flashMessenger()->getCurrentSuccessMessages();
+    $this->flashMessenger()->clearCurrentMessagesFromNamespace(FlashMessenger::NAMESPACE_SUCCESS);
+} else {
+    $successMessages = $this->flashMessenger()->getSuccessMessages();
 }
 
 ?>
@@ -33,10 +38,16 @@ if ($currentErrorMessages) {
     </div>
 <?php endif; ?>
 
-<?php if ($this->flashMessenger(FlashMessenger::NAMESPACE_SUCCESS)) : ?>
+<?php if ($successMessages) : ?>
     <div class="alert fade in alert-success">
         <button type="button" class="close" data-dismiss="alert">×</button>
         <h4 class="alert-heading">Ok!</h4>
-        <?= $this->flashMessenger()->render(FlashMessenger::NAMESPACE_SUCCESS) ?>
+        <ul>
+            <?php
+            foreach ($successMessages as $successMessage) :
+                echo sprintf("<li>%s</li>", $this->escapeHtml($successMessage));
+            endforeach;
+            ?>
+        </ul>
     </div>
 <?php endif; ?>
