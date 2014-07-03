@@ -35,6 +35,8 @@ class RbacIntegrationTest extends TestCase
 
     public function setUp()
     {
+        require_once __DIR__ . '/_files/session_regenerate_id.php';
+
         $serviceManager = Bootstrap::getServiceManager();
 
         $serviceManager->get('Application')->bootstrap();
