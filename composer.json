@@ -28,7 +28,7 @@
         "stefanotorresi/my-base": "~1.1,>=1.1.2",
         "zf-commons/zfc-rbac": "~2.1",
         "zf-commons/zfc-user": "~1.0",
-        "zf-commons/zfc-user-doctrine-orm": "0.*",
+        "zf-commons/zfc-user-doctrine-orm": "~1.0",
         "ocramius/lazy-property": "1.*"
     },
     "require-dev": {
