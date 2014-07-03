@@ -86,7 +86,7 @@ class AdminController extends AbstractActionController
     {
         /** @var Request $request */
         $request = $this->getRequest();
-        $request->getQuery()->set('redirect', $this->url()->fromRoute($this->moduleOptions->getPostLogoutRoute()));
+        $request->getQuery()->set('redirect', $this->moduleOptions->getPostLogoutRoute());
 
         return $this->forward()->dispatch('zfcuser');
     }
